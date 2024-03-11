@@ -8,8 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class MemberRepository {
 
-    private  static Map<Long,Member> store=new HashMap<>();
-    private static AtomicLong sequence=new AtomicLong(0l);
+    private  static Map<String,Member> store=new HashMap<>();
     private static final MemberRepository instance= new MemberRepository();
 
     public static MemberRepository getInstance(){
@@ -20,14 +19,12 @@ public class MemberRepository {
 
     public Member save (Member member){
 
-        long code= sequence.incrementAndGet();
-        member.setCode(code);
-        store.put(Long.valueOf(code), member);
+        store.put(member.getId(), member);
         return member;
     }
 
-    public Member findById(Long code){
-        return store.get(code);
+    public Member findById(String id){
+        return store.get(id);
 
     }
     public List<Member> findAll(){

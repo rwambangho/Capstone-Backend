@@ -8,7 +8,7 @@ import lombok.Setter;
 public class Member {
 
 
-    private Long code;
+
     private String id;
     private String pw;
     private String username;
