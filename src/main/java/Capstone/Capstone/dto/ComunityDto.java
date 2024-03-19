@@ -18,12 +18,5 @@ public class ComunityDto {
 
     private double endLocation[];
 
-    public ComunityDto(String title, String content, String name, double time, double[] startLocation, double[] endLocation) {
-        this.title = title;
-        this.content = content;
-        this.name = name;
-        this.time = time;
-        this.startLocation = startLocation;
-        this.endLocation = endLocation;
-    }
+
 }

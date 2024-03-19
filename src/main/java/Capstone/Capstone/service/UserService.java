@@ -1,15 +1,13 @@
 package Capstone.Capstone.service;
-import Capstone.Capstone.dto.UserDto;
-
-import java.util.List;
+import Capstone.Capstone.entity.User;
 
 public interface UserService {
-    void saveUser(UserDto userDTO);
+    void saveUser(User user);
 
-    UserDto getUserById(String Id);
+    User getUserById(String Id);
     void updateUserPassword(String Id, String newPassword);
     boolean authenticateUser(String Id, String password);
-    String sendSms(UserDto UserDTO);
+    String sendSms(User user);
 
-    boolean checkVerificationCode(UserDto userDTO,String verificationCode);
+    boolean checkVerificationCode(User user, String verificationCode);
 }

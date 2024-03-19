@@ -1,4 +1,4 @@
-package Capstone.Capstone;
+package Capstone.Capstone.utils;
 
 import jakarta.annotation.PostConstruct;
 import lombok.Value;
