@@ -16,22 +16,20 @@ public class Community {
     private Long id;
     private String title;
     private String content;
-
-    private String name;
-
+    private String nickName;
     private double time;
-
-    private double startLocation[];
-
-    private double endLocation[];
+    private String image;
+    private Long like_count;
 
 
-    public Community(String title, String content, String name, double time, double[] startLocation, double[] endLocation) {
+    public Community(String title, String content, double time) {
         this.title = title;
         this.content = content;
-        this.name = name;
         this.time = time;
-        this.startLocation = startLocation;
-        this.endLocation = endLocation;
+
+    }
+
+    public Community() {
+
     }
 }

@@ -14,9 +14,6 @@ public class ComunityDto {
 
     private double time;
 
-    private double startLocation[];
-
-    private double endLocation[];
 
 
 }

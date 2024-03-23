@@ -11,6 +11,7 @@ public interface CommunityService {
     Community save(Community community);
     Community update(Long id, Community community);
 
+    Community saveImage(Community community);
 
-    void delete(Long id);
+    void delete(long id);
 }

@@ -10,4 +10,6 @@ public interface UserService {
     String sendSms(User user);
 
     boolean checkVerificationCode(User user, String verificationCode);
+
+    void checkOutUser();
 }
