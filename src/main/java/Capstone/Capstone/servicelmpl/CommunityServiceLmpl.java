@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +39,9 @@ public class CommunityServiceLmpl implements CommunityService {
 
     @Override
     public Community save(Community community) {
-
+        LocalDateTime now = LocalDateTime.now();
+        community.setTime(now);
+        community.setLikeCount(0L);
         return communityRepository.save(community);
     }
 
@@ -91,5 +94,22 @@ public class CommunityServiceLmpl implements CommunityService {
 
         communityRepository.deleteById(id);
     }
+    @Override
+    public void addLike(Community community){
+       Optional<Community> findCommunity=communityRepository.findById(community.getId());
+       if(findCommunity.isPresent())
+       {
+           long LikeCount=findCommunity.get().getLikeCount();
+           findCommunity.get().setLikeCount(LikeCount+1);
+           communityRepository.save(findCommunity.get());
+
+       }
+    }
+
+    @Override
+    public List<Community> findPopularCommunity() {
+        return communityRepository.findTop5ByOrderByLikeCountDesc();
+    }
+
 }
 

@@ -14,4 +14,8 @@ public interface CommunityService {
     Community saveImage(Community community);
 
     void delete(long id);
+
+    void addLike(Community community) ;
+
+    List<Community> findPopularCommunity();
 }

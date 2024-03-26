@@ -101,4 +101,20 @@ public class CommunityController {
         }
         return new ResponseEntity<>("삭제 실패",HttpStatus.BAD_REQUEST);
     }
+    @PutMapping("/addLike")
+    @Tag(name="Community API")
+    @Operation(summary="좋아요 추가",description="게시판 글 좋아요 개수를 1개 늘립니다.")
+    public ResponseEntity<String> addLike(@RequestBody Community community){
+        communityService.addLike(community);
+        return new ResponseEntity<>("좋아요 성공",HttpStatus.OK);
+
+    }
+    @Tag(name="Community API")
+    @Operation(summary="인기글 조회",description="게시판 글 좋아요 개수가 많은 게시글부터 5개 조회합니다.")
+    @GetMapping("/PopularCommunity")
+    public ResponseEntity<List<Community>> getPopularCommunity(){
+        List<Community> popularCommunity=communityService.findPopularCommunity();
+        return new ResponseEntity<>(popularCommunity,HttpStatus.OK);
+    }
+
 }
