@@ -1,4 +1,4 @@
-package Capstone.Capstone.controller;
+package Capstone.Capstone.Controller;
 
 import Capstone.Capstone.entity.Community;
 import Capstone.Capstone.service.CommunityService;
