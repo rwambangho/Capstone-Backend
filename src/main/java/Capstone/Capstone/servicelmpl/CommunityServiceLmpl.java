@@ -111,5 +111,17 @@ public class CommunityServiceLmpl implements CommunityService {
         return communityRepository.findTop5ByOrderByLikeCountDesc();
     }
 
+    @Override
+    public void addClickCount(long id) {
+        Optional<Community> community= communityRepository.findById(id);
+        if(community.isPresent())
+        {
+          Community ClickCommunity=community.get();
+           long presentCount= ClickCommunity.getClickCount();
+           presentCount++;
+            ClickCommunity.setClickCount(presentCount);
+        }
+    }
+
 }
 

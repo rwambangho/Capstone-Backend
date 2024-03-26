@@ -46,6 +46,7 @@ public class CommunityController {
     @Tag(name="Community API")
     @Operation(summary = "글 찾기",description = "id로 글을 찾습니다.")
     public Optional<Community> getCommunityById(@PathVariable Long id) {
+        communityService.addClickCount(id);
         return communityService.findById(id);
     }
 

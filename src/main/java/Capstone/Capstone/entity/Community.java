@@ -22,6 +22,7 @@ public class Community {
     private LocalDateTime time;
     private String image;
     private Long likeCount;
+    private long clickCount;
 
 
     public Community(String title, String content) {
