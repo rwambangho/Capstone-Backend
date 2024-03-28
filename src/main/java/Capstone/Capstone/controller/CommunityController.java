@@ -1,7 +1,7 @@
 package Capstone.Capstone.Controller;
 
 import Capstone.Capstone.entity.Community;
-import Capstone.Capstone.service.CommunityService;
+import Capstone.Capstone.Service.CommunityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;

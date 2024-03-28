@@ -17,7 +17,8 @@ public class UserDto {
     private String id;
     private String password;
     private String nickname;
-
+    private boolean isDriver; //현재 운전자 모드인지 아닌지
+    private String driverLicense; //운전면허증 등록여부
 
 
 

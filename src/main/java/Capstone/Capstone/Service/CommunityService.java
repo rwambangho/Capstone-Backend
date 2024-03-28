@@ -1,4 +1,4 @@
-package Capstone.Capstone.service;
+package Capstone.Capstone.Service;
 import Capstone.Capstone.entity.Community;
 
 import java.util.List;

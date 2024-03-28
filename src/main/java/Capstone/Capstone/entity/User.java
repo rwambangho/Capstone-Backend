@@ -23,5 +23,13 @@ public class User {
     private String password;
     private String nickname;
 
+    private boolean isDriver; //현재 운전자 모드인지 아닌지
+    private String driverLicense; //운전면허증 등록여부
+
+    public void setIsDriver(boolean isDriver) {
+        this.isDriver = isDriver;
+    }
+
+
     // 생성자, getter, setter 등 필요한 코드 추가
 }

@@ -13,7 +13,7 @@ public class RecruitDto {
     private int idxNum;
     private String title;
     private String contents;
-    private Long username;
+    private String username;
     private Long id;
     private int star;
     private String destination;
@@ -22,4 +22,5 @@ public class RecruitDto {
     private Double departureLongitude;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private boolean isDriverPost; //운전자가 작성한 글인지 아닌지
 }

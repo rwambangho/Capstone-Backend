@@ -2,6 +2,7 @@ package Capstone.Capstone.servicelmpl;
 
 import Capstone.Capstone.Service.RecruitService;
 import Capstone.Capstone.entity.Recruit;
+import Capstone.Capstone.entity.User;
 import Capstone.Capstone.repository.RecruitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,8 +35,11 @@ public class RecruitServiceImpl implements RecruitService {
     }
 
     @Override
-    public Recruit createRecruit(Recruit recruit){
-
+    public Recruit createRecruit(Recruit recruit, User user){
+        if (user.isDriver() && (user.getDriverLicense() == null || user.getDriverLicense().isEmpty())) {
+            throw new IllegalStateException("운전면허증 등록이 필요합니다.");
+        } //사용자가 운전자 모드인 경우 운전면허증이 등록되어 있는지 확인하기
+        recruit.setIsDriverPost(user.isDriver());
         return recruitRepository.save(recruit);
     }
 
@@ -73,4 +77,6 @@ public class RecruitServiceImpl implements RecruitService {
     public List<Recruit> searchRecruits(LocalDate departureDate, String destination) {
         return recruitRepository.findByDepartureDateAndDestination(departureDate, destination);
     }
+
+
 }

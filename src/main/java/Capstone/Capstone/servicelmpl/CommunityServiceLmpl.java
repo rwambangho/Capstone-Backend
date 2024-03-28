@@ -3,7 +3,7 @@ package Capstone.Capstone.servicelmpl;
 
 import Capstone.Capstone.entity.Community;
 import Capstone.Capstone.repository.CommunityRepository;
-import Capstone.Capstone.service.CommunityService;
+import Capstone.Capstone.Service.CommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

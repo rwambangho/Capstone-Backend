@@ -1,4 +1,4 @@
-package Capstone.Capstone.service;
+package Capstone.Capstone.Service;
 import Capstone.Capstone.entity.User;
 
 public interface UserService {
@@ -10,4 +10,7 @@ public interface UserService {
     String sendSms(User user);
 
     boolean checkVerificationCode(User user, String verificationCode);
+    void switchToDriverMode(User user);
+
+    void registerDriverLicense(User user, String driverLicense);
 }
