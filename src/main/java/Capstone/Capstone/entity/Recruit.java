@@ -18,7 +18,7 @@ public class Recruit {
     private int idxNum;
     private String title;
     private String contents;
-    private Long username;
+    private String username;
     private Long id;
     private int star;
     private String destination; //목적지
@@ -41,7 +41,7 @@ public class Recruit {
         updatedAt = LocalDateTime.now();
     }
 
-    public Recruit(int idxNum, String title, String contents, Long username, Long id, int star) {
+    public Recruit(int idxNum, String title, String contents, String username, Long id, int star) {
         this.idxNum = idxNum;
         this.title = title;
         this.contents = contents;

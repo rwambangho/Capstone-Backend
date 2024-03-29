@@ -117,5 +117,10 @@ public class CommunityController {
         List<Community> popularCommunity=communityService.findPopularCommunity();
         return new ResponseEntity<>(popularCommunity,HttpStatus.OK);
     }
+    @GetMapping("/search/{title}")
+    public ResponseEntity<List<Community>> getCommunityByTitle(@PathVariable String title){
+        List<Community> community=communityService.findByTitle(title);
+        return new ResponseEntity<>(community,HttpStatus.OK);
+    }
 
 }

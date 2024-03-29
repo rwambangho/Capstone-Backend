@@ -38,6 +38,11 @@ public class CommunityServiceLmpl implements CommunityService {
     }
 
     @Override
+    public List<Community> findByTitle(String title) {
+        return communityRepository.findByTitle(title);
+    }
+
+    @Override
     public Community save(Community community) {
         LocalDateTime now = LocalDateTime.now();
         community.setTime(now);

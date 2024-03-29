@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface CommunityService {
     List<Community> findAll();
     Optional<Community> findById(Long id);
-    Optional<Community> findByTitle(String title);
+    List<Community> findByTitle(String title);
 
     Community save(Community community);
     Community update(Long id, Community community);

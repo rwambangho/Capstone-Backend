@@ -15,7 +15,6 @@ public class User {
     @Column(name = "id")
     private String id;
 
-
     private String name;
     private Date birthdate;
     private String phoneNumber;
