@@ -1,5 +1,6 @@
-package Capstone.Capstone.Controller;
+package Capstone.Capstone.controller;
 
+import Capstone.Capstone.entity.Comment;
 import Capstone.Capstone.entity.Community;
 import Capstone.Capstone.service.CommunityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,13 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 @Slf4j
@@ -42,13 +37,6 @@ public class CommunityController {
         return new ResponseEntity<>(communities, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    @Tag(name="Community API")
-    @Operation(summary = "글 찾기",description = "id로 글을 찾습니다.")
-    public Optional<Community> getCommunityById(@PathVariable Long id) {
-        communityService.addClickCount(id);
-        return communityService.findById(id);
-    }
 
     @PostMapping("/save")
     @Tag(name="Community API")
@@ -117,10 +105,31 @@ public class CommunityController {
         List<Community> popularCommunity=communityService.findPopularCommunity();
         return new ResponseEntity<>(popularCommunity,HttpStatus.OK);
     }
+    @Tag(name="Community API")
     @GetMapping("/search/{title}")
     public ResponseEntity<List<Community>> getCommunityByTitle(@PathVariable String title){
         List<Community> community=communityService.findByTitle(title);
         return new ResponseEntity<>(community,HttpStatus.OK);
     }
+    @Tag(name="Community API")
+    @Operation(summary="댓글 포함 조회")
+    @GetMapping("/posts/read/{id}")
+    public  ResponseEntity <Community> read(@PathVariable Long id) {
+        Optional<Community> optionalCommunity = communityService.findById(id);
+
+        if (optionalCommunity.isPresent()) {
+            Community community = optionalCommunity.get();
+            List<Comment> comments =community.getComments();
+
+            if (comments != null && !comments.isEmpty()) {
+                return new ResponseEntity<>(community, HttpStatus.OK);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }

@@ -22,4 +22,6 @@ public interface CommunityService {
     List<Community> findPopularCommunity();
 
     void addClickCount(long id);
+
+
 }
