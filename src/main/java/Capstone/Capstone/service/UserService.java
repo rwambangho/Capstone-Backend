@@ -1,4 +1,5 @@
 package Capstone.Capstone.service;
+import Capstone.Capstone.dto.UserDto;
 import Capstone.Capstone.entity.User;
 
 public interface UserService {
@@ -10,6 +11,10 @@ public interface UserService {
     String sendSms(User user);
 
     boolean checkVerificationCode(User user, String verificationCode);
+
+    public User convertToEntity(UserDto userDto);
+
+    public  UserDto convertToDto(User user);
 
     void checkOutUser();
 }

@@ -45,7 +45,8 @@ public class CommunityController {
 
         HttpSession session = request.getSession(false);
         if (session != null && sessionId.equals(session.getId())) {
-            String nickName = (String) session.getAttribute("nickName");
+            String nickName = (String) session.getAttribute("id");
+            log.info("id={}",nickName);
             community.setNickName(nickName);
             log.info("nickName={}",community.getNickName());
         } else {

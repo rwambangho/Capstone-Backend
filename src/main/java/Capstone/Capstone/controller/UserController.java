@@ -61,12 +61,11 @@ public class UserController {
         String Id=user.getId();
         String password=user.getPassword();
         User findUser=userService.getUserById(Id);
-        String nickName= findUser.getNickname();
         boolean isAuthenticated = userService.authenticateUser(Id, password);
         if (isAuthenticated) {
             HttpSession session = request.getSession();
-            session.setAttribute("nickName",nickName);
-            return new ResponseEntity<>(nickName, HttpStatus.OK);
+            session.setAttribute("id",findUser.getId());
+            return new ResponseEntity<>(findUser.getId(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Login failed", HttpStatus.UNAUTHORIZED);
         }

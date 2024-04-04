@@ -4,6 +4,7 @@ package Capstone.Capstone.servicelmpl;
 import Capstone.Capstone.entity.Community;
 import Capstone.Capstone.repository.CommunityRepository;
 import Capstone.Capstone.service.CommunityService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class CommunityServiceLmpl implements CommunityService {
 
@@ -47,6 +49,7 @@ public class CommunityServiceLmpl implements CommunityService {
         LocalDateTime now = LocalDateTime.now();
         community.setTime(now);
         community.setLikeCount(0L);
+        log.info("community={}",community.getId());
         return communityRepository.save(community);
     }
 

@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -24,5 +26,7 @@ public class User {
     private String nickname;
 
 
-    // 생성자, getter, setter 등 필요한 코드 추가
+    @ManyToMany(mappedBy = "users")
+    private Set<ChatRoom> chatRooms = new HashSet<>();
+
 }

@@ -33,7 +33,7 @@ public class CommentController {
 
         HttpSession session = request.getSession(false);
         if (session != null && sessionId.equals(session.getId())) {
-            String nickName = (String) session.getAttribute("nickName");
+            String nickName = (String) session.getAttribute("id");
             comment.setNickName(nickName);
         } else {
             return new ResponseEntity<>("로그아웃 상태입니다.", HttpStatus.BAD_REQUEST);
