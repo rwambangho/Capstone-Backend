@@ -1,18 +1,18 @@
 package Capstone.Capstone.controller;
 
 import Capstone.Capstone.Service.RecruitService;
+import Capstone.Capstone.Service.UserService;
 import Capstone.Capstone.entity.Recruit;
+import Capstone.Capstone.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Tag(name="RECRUIT API", description = "RECRUIT API입니다")
@@ -20,6 +20,9 @@ public class RecruitController {
 
     @Autowired
     private RecruitService recruitService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/recruits")
     @Tag(name="RECRUIT API")
@@ -40,19 +43,14 @@ public class RecruitController {
         return new ResponseEntity<>(recruit, HttpStatus.OK);
     }
 
-    @GetMapping("/recruits/new")
-    @Tag(name="RECRUIT API")
-    @Operation(summary = "모집 글 생성",description = "모집 글을 생성합니다.")
-    public String createRecruitForm(Model model) {
-        model.addAttribute("recruit", new Recruit());
-        return "recruitForm";
-    }
 
     @PostMapping("/recruits")
     @Tag(name="RECRUIT API")
     @Operation(summary = "모집 글 생성",description = "모집 글을 생성합니다.")
-    public Recruit createRecruit(@RequestBody Recruit recruit) {
-        return recruitService.createRecruit(recruit);
+    public ResponseEntity<Recruit> createRecruit(@RequestBody Recruit recruit, @RequestParam String id) {
+        User user = userService.getUserById(id);
+        Recruit createdRecruit = recruitService.createRecruit(recruit, user);
+        return new ResponseEntity<>(createdRecruit, HttpStatus.CREATED);
 
     }
 
@@ -90,6 +88,14 @@ public class RecruitController {
             @RequestParam LocalDate departureDate,
             @RequestParam String destination) {
         List<Recruit> recruits = recruitService.searchRecruits(departureDate, destination);
+        return new ResponseEntity<>(recruits, HttpStatus.OK);
+    }
+
+    @GetMapping("/by-distance")
+    @Tag(name="RECRUIT API")
+    @Operation(summary = "거리 순 모집 글 목록보기", description = "거리순 모집 글을 불러옵니다.")
+    public ResponseEntity<List<Recruit>> getRecruitsByDistance(@RequestParam double latitude, @RequestParam double longitude) {
+        List<Recruit> recruits = recruitService.findRecruitsByDistance(latitude, longitude);
         return new ResponseEntity<>(recruits, HttpStatus.OK);
     }
 

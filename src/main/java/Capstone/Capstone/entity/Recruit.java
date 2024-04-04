@@ -25,6 +25,7 @@ public class Recruit {
     private LocalDate departureDate; //출발일자
     private Double departureLatitude; //출발지 위도
     private Double departureLongitude; //출발지 경도
+    private boolean isDriverPost; //운전자가 작성한 글인지 아닌지
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt; //생성날짜
@@ -41,6 +42,11 @@ public class Recruit {
         updatedAt = LocalDateTime.now();
     }
 
+
+
+    public void setIsDriverPost(boolean isDriverPost) {
+        this.isDriverPost = isDriverPost;
+
     public Recruit(int idxNum, String title, String contents, String username, Long id, int star) {
         this.idxNum = idxNum;
         this.title = title;
@@ -48,6 +54,11 @@ public class Recruit {
         this.username = username;
         this.id = id;
         this.star = star;
+
     }
+
+    public Double getLatitude() {return departureLatitude;}
+    public Double getLongitude() {return departureLongitude;}
+
 }
 

@@ -3,8 +3,12 @@ package Capstone.Capstone.servicelmpl;
 
 import Capstone.Capstone.entity.Community;
 import Capstone.Capstone.repository.CommunityRepository;
+<<<<<<< HEAD
+import Capstone.Capstone.Service.CommunityService;
+=======
 import Capstone.Capstone.service.CommunityService;
 import lombok.extern.slf4j.Slf4j;
+>>>>>>> 2cfcfd7c742f39cf87e705c54cd76a68f0d366dd
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

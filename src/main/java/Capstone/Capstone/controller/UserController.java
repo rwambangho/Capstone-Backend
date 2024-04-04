@@ -2,7 +2,9 @@ package Capstone.Capstone.controller;
 
 
 import Capstone.Capstone.entity.User;
-import Capstone.Capstone.service.UserService;
+
+
+import Capstone.Capstone.Service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -116,6 +118,24 @@ public class UserController {
         return userService.checkVerificationCode(user, verificationCode);
 
 
+    }
+
+    @PostMapping("/{userId}/switchToDriverMode")
+    @Tag(name="User API")
+    @Operation(summary = "운전자모드 변경",description = "운전자모드로 전환합니다.")
+    public ResponseEntity<?> switchToDriverMode(@PathVariable String id) {
+        User user = userService.getUserById(id);
+        userService.switchToDriverMode(user);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{userId}/registerDriverLicense")
+    @Tag(name="User API")
+    @Operation(summary = "운전면허증 등록",description = "운전면허증을 등록합니다.")
+    public ResponseEntity<?> registerDriverLicense(@PathVariable String id, @RequestBody String driverLicense) {
+        User user = userService.getUserById(id);
+        userService.registerDriverLicense(user, driverLicense);
+        return ResponseEntity.ok().build();
     }
 
 
