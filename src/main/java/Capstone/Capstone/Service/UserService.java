@@ -1,4 +1,5 @@
 package Capstone.Capstone.Service;
+import Capstone.Capstone.dto.UserDto;
 import Capstone.Capstone.entity.User;
 
 public interface UserService {
@@ -13,4 +14,12 @@ public interface UserService {
     void switchToDriverMode(User user);
 
     void registerDriverLicense(User user, String driverLicense);
+
+
+    public User convertToEntity(UserDto userDto);
+
+    public  UserDto convertToDto(User user);
+
+    void checkOutUser();
+
 }

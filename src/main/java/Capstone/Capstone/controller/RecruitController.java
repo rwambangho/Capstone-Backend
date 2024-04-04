@@ -1,4 +1,4 @@
-package Capstone.Capstone.Controller;
+package Capstone.Capstone.controller;
 
 import Capstone.Capstone.Service.RecruitService;
 import Capstone.Capstone.Service.UserService;

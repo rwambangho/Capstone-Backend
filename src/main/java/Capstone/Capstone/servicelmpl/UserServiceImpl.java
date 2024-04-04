@@ -99,5 +99,28 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public void checkOutUser() {
+
+
+    }
+@Override
+    public User convertToEntity(UserDto userDto) {
+        User user = new User();
+        user.setId(userDto.getId());
+        user.setNickname(userDto.getNickname());
+        return user;
+    }
+@Override
+    public UserDto convertToDto(User user){
+        UserDto userDto=new UserDto();
+        userDto.setId(user.getId());
+        userDto.setNickname(user.getNickname());
+        return userDto;
+}
+
+
+
+
 }
 
