@@ -46,16 +46,16 @@ public class Recruit {
 
     public void setIsDriverPost(boolean isDriverPost) {
         this.isDriverPost = isDriverPost;
-
-    public Recruit(int idxNum, String title, String contents, String username, Long id, int star) {
-        this.idxNum = idxNum;
-        this.title = title;
-        this.contents = contents;
-        this.username = username;
-        this.id = id;
-        this.star = star;
-
     }
+    public Recruit( int idxNum, String title, String contents, String username, Long id,int star){
+            this.idxNum = idxNum;
+            this.title = title;
+            this.contents = contents;
+            this.username = username;
+            this.id = id;
+            this.star = star;
+
+        }
 
     public Double getLatitude() {return departureLatitude;}
     public Double getLongitude() {return departureLongitude;}

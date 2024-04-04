@@ -1,14 +1,14 @@
 package Capstone.Capstone.servicelmpl;
 
+import Capstone.Capstone.Service.UserService;
 import Capstone.Capstone.dto.ChatMessageDto;
 import Capstone.Capstone.entity.ChatMessage;
 import Capstone.Capstone.entity.ChatRoom;
-import Capstone.Capstone.entity.User;
+
 import Capstone.Capstone.repository.ChatMessageRepository;
 import Capstone.Capstone.repository.ChatRoomRepository;
 import Capstone.Capstone.service.ChatMessageService;
-import Capstone.Capstone.service.ChatRoomSerivce;
-import Capstone.Capstone.service.UserService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
