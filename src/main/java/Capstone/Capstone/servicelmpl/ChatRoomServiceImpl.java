@@ -1,11 +1,10 @@
 package Capstone.Capstone.servicelmpl;
 
+import Capstone.Capstone.Service.UserService;
 import Capstone.Capstone.dto.UserDto;
 import Capstone.Capstone.entity.ChatRoom;
 import Capstone.Capstone.entity.User;
 import Capstone.Capstone.repository.ChatRoomRepository;
-import Capstone.Capstone.service.ChatRoomSerivce;
-import Capstone.Capstone.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,7 @@ import java.util.*;
 
 @Slf4j
 @Service
-public class ChatRoomServiceImpl implements ChatRoomSerivce {
+public class ChatRoomServiceImpl implements Capstone.Capstone.service.ChatRoomSerivce {
     private final ChatRoomRepository chatRoomRepository;
     private final UserService userService;
 

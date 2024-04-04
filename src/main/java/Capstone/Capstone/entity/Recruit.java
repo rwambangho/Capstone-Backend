@@ -46,7 +46,7 @@ public class Recruit {
 
     public void setIsDriverPost(boolean isDriverPost) {
         this.isDriverPost = isDriverPost;
-
+    }
     public Recruit(int idxNum, String title, String contents, String username, Long id, int star) {
         this.idxNum = idxNum;
         this.title = title;
