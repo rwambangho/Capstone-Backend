@@ -46,5 +46,9 @@ public class Recruit {
     public void setIsDriverPost(boolean isDriverPost) {
         this.isDriverPost = isDriverPost;
     }
+
+    public Double getLatitude() {return departureLatitude;}
+    public Double getLongitude() {return departureLongitude;}
+
 }
 

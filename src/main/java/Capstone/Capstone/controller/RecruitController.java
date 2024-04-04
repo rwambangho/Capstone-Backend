@@ -91,6 +91,13 @@ public class RecruitController {
         return new ResponseEntity<>(recruits, HttpStatus.OK);
     }
 
+    @GetMapping("/by-distance")
+    @Tag(name="RECRUIT API")
+    @Operation(summary = "거리 순 모집 글 목록보기", description = "거리순 모집 글을 불러옵니다.")
+    public ResponseEntity<List<Recruit>> getRecruitsByDistance(@RequestParam double latitude, @RequestParam double longitude) {
+        List<Recruit> recruits = recruitService.findRecruitsByDistance(latitude, longitude);
+        return new ResponseEntity<>(recruits, HttpStatus.OK);
+    }
 
 
 

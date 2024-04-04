@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -77,6 +79,31 @@ public class RecruitServiceImpl implements RecruitService {
     public List<Recruit> searchRecruits(LocalDate departureDate, String destination) {
         return recruitRepository.findByDepartureDateAndDestination(departureDate, destination);
     }
+    @Override
+    public List<Recruit> findRecruitsByDistance(double userLat, double userLon) {
+        List<Recruit> allRecruits = recruitRepository.findAll();
+        return allRecruits.stream()
+                .sorted(Comparator.comparing(recruit -> calculateDistance(userLat, userLon, recruit.getLatitude(), recruit.getLongitude())))
+                .collect(Collectors.toList());
+    }
 
+    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        double distance;
+        double radius = 6371; // 지구 반지름(km)
+        double toRadian = Math.PI / 180;
+
+        double deltaLatitude = Math.abs(lat1 - lat2) * toRadian;
+        double deltaLongitude = Math.abs(lon1 - lon2) * toRadian;
+
+        double sinDeltaLat = Math.sin(deltaLatitude / 2);
+        double sinDeltaLng = Math.sin(deltaLongitude / 2);
+        double squareRoot = Math.sqrt(
+                sinDeltaLat * sinDeltaLat +
+                        Math.cos(lat1 * toRadian) * Math.cos(lat2 * toRadian) * sinDeltaLng * sinDeltaLng);
+
+        distance = 2 * radius * Math.asin(squareRoot);
+
+        return distance;
+    }
 
 }
