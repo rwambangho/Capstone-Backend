@@ -22,4 +22,6 @@ public interface RecruitService {
     List<Recruit> searchRecruits(LocalDate departureDate, String destination);
     List<Recruit> findRecruitsByDistance(double userLat, double userLon);
 
+
+
 }

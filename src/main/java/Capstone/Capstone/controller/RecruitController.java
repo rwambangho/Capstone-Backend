@@ -6,6 +6,9 @@ import Capstone.Capstone.entity.Recruit;
 import Capstone.Capstone.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 @RestController
 @Tag(name="RECRUIT API", description = "RECRUIT API입니다")
 public class RecruitController {
@@ -47,10 +51,21 @@ public class RecruitController {
     @PostMapping("/recruits")
     @Tag(name="RECRUIT API")
     @Operation(summary = "모집 글 생성",description = "모집 글을 생성합니다.")
-    public ResponseEntity<Recruit> createRecruit(@RequestBody Recruit recruit, @RequestParam String id) {
-        User user = userService.getUserById(id);
-        Recruit createdRecruit = recruitService.createRecruit(recruit, user);
-        return new ResponseEntity<>(createdRecruit, HttpStatus.CREATED);
+    public ResponseEntity<Recruit> createRecruit(@RequestBody Recruit recruit, @CookieValue(value = "JSESSIONID", defaultValue = "") String sessionId, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null && sessionId.equals(session.getId())) {
+            String nickName = (String) session.getAttribute("id");
+            User user=userService.getUserById(nickName);
+
+            Recruit createdRecruit = recruitService.createRecruit(recruit, user);
+            log.info("recruit={}",createdRecruit);
+
+            return new ResponseEntity<>(createdRecruit, HttpStatus.CREATED);
+        }
+
+
+
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 
     }
 

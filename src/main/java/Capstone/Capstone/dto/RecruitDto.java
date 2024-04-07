@@ -6,6 +6,7 @@ import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,6 +17,7 @@ public class RecruitDto {
     private String username;
     private Long id;
     private int star;
+    private List<String> keywords;
     private String destination;
     private LocalDate departureDate;
     private Double departureLatitude;

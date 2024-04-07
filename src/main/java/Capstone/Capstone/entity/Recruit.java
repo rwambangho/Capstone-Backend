@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,6 +23,10 @@ public class Recruit {
     private String username;
     private Long id;
     private int star;
+
+    @ElementCollection
+    private List<String> keywords = new ArrayList<>(); //키워드
+
     private String destination; //목적지
     private LocalDate departureDate; //출발일자
     private Double departureLatitude; //출발지 위도
@@ -54,6 +60,7 @@ public class Recruit {
         this.username = username;
         this.id = id;
         this.star = star;
+
 
     }
 
