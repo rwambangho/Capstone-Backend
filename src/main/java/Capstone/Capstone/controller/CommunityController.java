@@ -1,8 +1,11 @@
 package Capstone.Capstone.controller;
 
-import Capstone.Capstone.entity.Comment;
+
+import Capstone.Capstone.dto.CommentDto;
+import Capstone.Capstone.dto.CommunityDto;
+import Capstone.Capstone.dto.LikeDto;
 import Capstone.Capstone.entity.Community;
-import Capstone.Capstone.Service.CommunityService;
+import Capstone.Capstone.service.CommunityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,10 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.modelmapper.ModelMapper;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
+
+import static java.util.Arrays.stream;
+
 @Slf4j
 @RestController
 @RequestMapping("/community")
@@ -23,20 +29,35 @@ import java.util.Optional;
 public class CommunityController {
 
     private final CommunityService communityService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public CommunityController(CommunityService communityService) {
+    public CommunityController(CommunityService communityService, ModelMapper modelMapper) {
         this.communityService = communityService;
+
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/")
     @Tag(name="Community API")
     @Operation(summary = "모든 글 찾기",description = "모든 글을 찾아옵니다.")
-    public ResponseEntity<List<Community>> getAllCommunities() {
+    public ResponseEntity<List<CommunityDto>> getAllCommunities() {
         List<Community> communities = communityService.findAll();
-        return new ResponseEntity<>(communities, HttpStatus.OK);
+       List<CommunityDto>communityDtos=communities.stream()
+                .map(community -> modelMapper.map(community, CommunityDto.class))
+                .toList();
+
+
+        return new ResponseEntity<>(communityDtos, HttpStatus.OK);
     }
 
+    @GetMapping("/post/{id}")
+    @Tag(name="Community API")
+    public  ResponseEntity<CommunityDto> getCommunityPost(@PathVariable Long id){
+        CommunityDto communityDto=new CommunityDto();
+       communityDto= modelMapper.map(communityService.findById(id), CommunityDto.class);
+        return new ResponseEntity<>(communityDto,HttpStatus.OK);
+    }
 
     @PostMapping("/save")
     @Tag(name="Community API")
@@ -75,12 +96,11 @@ public class CommunityController {
     @Operation(summary = "글 삭제",description = "게시판 글을 삭제합니다.")
     public ResponseEntity<String> deleteCommunity(@PathVariable Long id,HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        Optional<Community> community=communityService.findById(id);
+         Community community=communityService.findById(id);
         log.info("community={}",community);
-        if (community.isPresent()) {
-            Community communityObject = community.get();
-            String findTitle=communityObject.getTitle();
-            String findNickName = communityObject.getNickName();
+
+            String findTitle=community.getTitle();
+            String findNickName = community.getNickName();
             log.info("findTitle={} findNickName={}",findTitle,findNickName);
             String nickName = (String) session.getAttribute("nickName");
                 if (findNickName.equals(nickName)) {
@@ -88,49 +108,77 @@ public class CommunityController {
                     return new ResponseEntity<>("삭제 성공",HttpStatus.OK);
 
                 }
-        }
+
         return new ResponseEntity<>("삭제 실패",HttpStatus.BAD_REQUEST);
     }
-    @PutMapping("/addLike")
+    @PutMapping("/addLike/{id}")
     @Tag(name="Community API")
     @Operation(summary="좋아요 추가",description="게시판 글 좋아요 개수를 1개 늘립니다.")
-    public ResponseEntity<String> addLike(@RequestBody Community community){
-        communityService.addLike(community);
+    public ResponseEntity<String> addLike(@PathVariable Long id,@CookieValue(value = "id", defaultValue = "") String sessionId ){
+        communityService.addLike(id,sessionId);
         return new ResponseEntity<>("좋아요 성공",HttpStatus.OK);
 
     }
+
+
+    @PutMapping("/subLike/{id}")
+    @Tag(name="Community API")
+    @Operation(summary="좋아요 감소",description="게시판 글 좋아요 개수를 1개 줄입니다..")
+    public ResponseEntity<String> subLike(@PathVariable Long id,@CookieValue(value = "id", defaultValue = "") String sessionId){
+        communityService.subLike(id,sessionId);
+        return new ResponseEntity<>("좋아요 해제 성공",HttpStatus.OK);
+
+    }
+    @PutMapping("/addClickCount")
+    public ResponseEntity<String> addClickCount(@RequestBody CommunityDto communityDto){
+        Long id=communityDto.getId();
+        communityService.addClickCount(id);
+        return  new ResponseEntity<>("조회완료",HttpStatus.OK);
+    }
+
     @Tag(name="Community API")
     @Operation(summary="인기글 조회",description="게시판 글 좋아요 개수가 많은 게시글부터 5개 조회합니다.")
     @GetMapping("/PopularCommunity")
-    public ResponseEntity<List<Community>> getPopularCommunity(){
-        List<Community> popularCommunity=communityService.findPopularCommunity();
+    public ResponseEntity<List<CommunityDto>> getPopularCommunity(){
+        List<CommunityDto> popularCommunity= communityService.findPopularCommunity().stream()
+                .map(community -> modelMapper.map(community, CommunityDto.class))
+                .toList();
+
+
+
         return new ResponseEntity<>(popularCommunity,HttpStatus.OK);
     }
     @Tag(name="Community API")
-    @GetMapping("/search/{title}")
-    public ResponseEntity<List<Community>> getCommunityByTitle(@PathVariable String title){
-        List<Community> community=communityService.findByTitle(title);
-        return new ResponseEntity<>(community,HttpStatus.OK);
+    @GetMapping("/search")
+    public ResponseEntity<List<CommunityDto>> getCommunityByTitle(@RequestParam String title){
+        List<CommunityDto> communityDto=communityService.findByTitle(title).stream().map(
+                community -> modelMapper.map(community,CommunityDto.class)).toList();
+
+
+        return new ResponseEntity<>(communityDto,HttpStatus.OK);
     }
     @Tag(name="Community API")
     @Operation(summary="댓글 포함 조회")
     @GetMapping("/posts/read/{id}")
-    public  ResponseEntity <Community> read(@PathVariable Long id) {
-        Optional<Community> optionalCommunity = communityService.findById(id);
+    public  ResponseEntity <CommunityDto> read(@PathVariable Long id) {
+        Community community=communityService.findById(id);
+        CommunityDto communityDto = modelMapper.map( community,CommunityDto.class);
+         List<CommentDto> commentsDto=community.getComments().stream()
+                .map(comment -> modelMapper.map(comment, CommentDto.class))
+                .toList();
+         List<LikeDto> likesDto=community.getLikes().stream()
+                 .map(like -> modelMapper.map(like,LikeDto.class))
+                         .toList();
+         communityDto.setLikesDto(likesDto);
+         communityDto.setCommentsDto(commentsDto);
 
-        if (optionalCommunity.isPresent()) {
-            Community community = optionalCommunity.get();
-            List<Comment> comments =community.getComments();
 
-            if (comments != null && !comments.isEmpty()) {
-                return new ResponseEntity<>(community, HttpStatus.OK);
-            } else {
-                return ResponseEntity.notFound().build();
+
+
+
+                return new ResponseEntity<>(communityDto, HttpStatus.OK);
             }
-        } else {
-            return ResponseEntity.notFound().build();
-        }
     }
 
 
-}
+

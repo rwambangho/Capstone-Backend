@@ -1,10 +1,11 @@
 package Capstone.Capstone.controller;
 
 
+import Capstone.Capstone.dto.UserDto;
 import Capstone.Capstone.entity.User;
 
 
-import Capstone.Capstone.Service.UserService;
+import Capstone.Capstone.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -13,7 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,10 +48,10 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "유효하지 않은 유저"),
     })
     @Operation(summary = "회원 찾기", description = "id를 기반으로 user를 찾습니다.")
-    public ResponseEntity<User> getUserById(@PathVariable("userId") String userId) {
-        User user = userService.getUserById(userId);
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<UserDto> getUserById(@PathVariable("userId") String userId) {
+        UserDto userDto = userService.convertToDto(userService.getUserById(userId));
+        if (userDto != null) {
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }

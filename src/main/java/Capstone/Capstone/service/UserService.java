@@ -1,4 +1,4 @@
-package Capstone.Capstone.Service;
+package Capstone.Capstone.service;
 import Capstone.Capstone.dto.UserDto;
 import Capstone.Capstone.entity.User;
 

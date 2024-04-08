@@ -1,7 +1,7 @@
 package Capstone.Capstone.controller;
 
-import Capstone.Capstone.Service.RecruitService;
-import Capstone.Capstone.Service.UserService;
+import Capstone.Capstone.service.RecruitService;
+import Capstone.Capstone.service.UserService;
 import Capstone.Capstone.entity.Recruit;
 import Capstone.Capstone.entity.User;
 import io.swagger.v3.oas.annotations.Operation;

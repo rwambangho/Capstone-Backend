@@ -1,6 +1,8 @@
 package Capstone.Capstone.entity;
 
+
 import Capstone.Capstone.entity.Comment;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +37,9 @@ public class User {
 
     // 생성자, getter, setter 등 필요한 코드 추가
 
+
+    @OneToMany(mappedBy = "user")
+    private List<Like> likes;
 
     @ManyToMany(mappedBy = "users")
     private Set<ChatRoom> chatRooms = new HashSet<>();

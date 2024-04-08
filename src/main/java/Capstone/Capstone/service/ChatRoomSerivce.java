@@ -2,9 +2,6 @@ package Capstone.Capstone.service;
 
 import Capstone.Capstone.dto.UserDto;
 import Capstone.Capstone.entity.ChatRoom;
-import Capstone.Capstone.entity.User;
-
-import java.util.List;
 
 public interface ChatRoomSerivce {
    ChatRoom createChatRoom(UserDto user1, UserDto user2);

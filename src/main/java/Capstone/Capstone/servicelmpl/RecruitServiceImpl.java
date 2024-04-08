@@ -1,6 +1,6 @@
 package Capstone.Capstone.servicelmpl;
 
-import Capstone.Capstone.Service.RecruitService;
+import Capstone.Capstone.service.RecruitService;
 import Capstone.Capstone.entity.Recruit;
 import Capstone.Capstone.entity.User;
 import Capstone.Capstone.repository.RecruitRepository;
@@ -23,6 +23,8 @@ public class RecruitServiceImpl implements RecruitService {
     public RecruitServiceImpl(RecruitRepository recruitRepository) {
         this.recruitRepository = recruitRepository;
     }
+
+
 
     @Override
     public List<Recruit> selectBoardList(){
@@ -107,3 +109,5 @@ public class RecruitServiceImpl implements RecruitService {
     }
 
 }
+
+

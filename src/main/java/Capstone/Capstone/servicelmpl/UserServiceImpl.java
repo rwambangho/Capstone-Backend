@@ -4,7 +4,7 @@ import Capstone.Capstone.dto.UserDto;
 import Capstone.Capstone.entity.User;
 import Capstone.Capstone.utils.SmsUtil;
 import Capstone.Capstone.repository.UserRepository;
-import Capstone.Capstone.Service.UserService;
+import Capstone.Capstone.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

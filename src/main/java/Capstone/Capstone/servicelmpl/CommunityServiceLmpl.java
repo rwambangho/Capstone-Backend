@@ -1,9 +1,16 @@
 package Capstone.Capstone.servicelmpl;
 
 
+import Capstone.Capstone.dto.LikeDto;
 import Capstone.Capstone.entity.Community;
+import Capstone.Capstone.entity.Like;
 import Capstone.Capstone.repository.CommunityRepository;
-import Capstone.Capstone.Service.CommunityService;
+
+import Capstone.Capstone.service.CommunityService;
+
+import Capstone.Capstone.repository.LikeRepository;
+import Capstone.Capstone.repository.UserRepository;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,10 +30,17 @@ import java.util.Optional;
 public class CommunityServiceLmpl implements CommunityService {
 
     private final CommunityRepository communityRepository;
+    private final LikeRepository likeRepository;
+
+    private final UserRepository userRepository;
+
+
 
     @Autowired
-    public CommunityServiceLmpl(CommunityRepository communityRepository) {
+    public CommunityServiceLmpl(CommunityRepository communityRepository, LikeRepository likeRepository, UserRepository userRepository) {
         this.communityRepository = communityRepository;
+        this.likeRepository = likeRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -35,13 +49,21 @@ public class CommunityServiceLmpl implements CommunityService {
     }
 
     @Override
-    public Optional<Community> findById(Long id) {
-        return communityRepository.findById(id);
+    public Community findById(Long id) {
+
+        Optional<Community> OptionalCommunity=communityRepository.findById(id);
+        if (OptionalCommunity.isPresent())
+        {
+            Community community=OptionalCommunity.get();
+            return community;
+        }
+        return null;
     }
+
 
     @Override
     public List<Community> findByTitle(String title) {
-        return communityRepository.findByTitle(title);
+        return communityRepository.findByTitleContaining(title);
     }
 
     @Override
@@ -103,33 +125,96 @@ public class CommunityServiceLmpl implements CommunityService {
         communityRepository.deleteById(id);
     }
     @Override
-    public void addLike(Community community){
-       Optional<Community> findCommunity=communityRepository.findById(community.getId());
+    public void addLike(long communityId,String userId){
+       Optional<Community> findCommunity=communityRepository.findById(communityId);
        if(findCommunity.isPresent())
        {
            long LikeCount=findCommunity.get().getLikeCount();
            findCommunity.get().setLikeCount(LikeCount+1);
            communityRepository.save(findCommunity.get());
+           List<Like> likeList=likeRepository.findByCommunityIdAndUserId(communityId,userId);
+
+            if (!likeList.isEmpty())
+            {
+                likeList.get(0).setLiked(true);
+                log.info("like={}",likeList.get(0).isLiked());
+                likeRepository.save(likeList.get(0));
+            }
+            else
+            {
+                LikeDto likeDto=new LikeDto();
+                likeDto.setUserId(userId);
+                likeDto.setCommunityId(communityId);
+                likeDto.setUserId(userId);
+                likeDto.setLiked(true);
+                Like like=new Like();
+                like.setUser(userRepository.findById(userId).get());
+                like.setCommunity(communityRepository.findById(communityId).get());
+                log.info("likeDto={}",likeDto.isLiked());
+                like.setLiked(likeDto.isLiked());
+                likeRepository.save(like);
+            }
 
        }
     }
 
+
+    @Override
+    public void subLike(long communityId,String userId){
+        Optional<Community> findCommunity=communityRepository.findById(communityId);
+        if(findCommunity.isPresent())
+        {
+            long LikeCount=findCommunity.get().getLikeCount();
+            findCommunity.get().setLikeCount(LikeCount-1);
+            communityRepository.save(findCommunity.get());
+            List<Like> likeList=likeRepository.findByCommunityIdAndUserId(communityId,userId);
+            if (!likeList.isEmpty())
+            {
+                likeList.get(0).setLiked(false);
+                log.info("like={}",likeList.get(0).isLiked());
+                likeRepository.save(likeList.get(0));
+            }
+            else
+            {
+                LikeDto likeDto=new LikeDto();
+                likeDto.setUserId(userId);
+                likeDto.setCommunityId(communityId);
+                likeDto.setUserId(userId);
+                likeDto.setLiked(false);
+                Like like=new Like();
+                like.setUser(userRepository.findById(userId).get());
+                like.setCommunity(communityRepository.findById(communityId).get());
+                log.info("likeDto={}",likeDto.isLiked());
+                like.setLiked(likeDto.isLiked());
+                likeRepository.save(like);
+            }
+
+        }
+    }
     @Override
     public List<Community> findPopularCommunity() {
         return communityRepository.findTop5ByOrderByLikeCountDesc();
     }
 
     @Override
-    public void addClickCount(long id) {
+    public void addClickCount(Long id) {
         Optional<Community> community= communityRepository.findById(id);
         if(community.isPresent())
         {
           Community ClickCommunity=community.get();
            long presentCount= ClickCommunity.getClickCount();
+           log.info("{}",presentCount);
            presentCount++;
             ClickCommunity.setClickCount(presentCount);
+            log.info("{}",presentCount);
+            log.info("{},{}",ClickCommunity.getClickCount());
+            communityRepository.save(ClickCommunity);
+
         }
     }
+
+
+
 
 
 

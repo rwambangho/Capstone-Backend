@@ -1,12 +1,13 @@
-package Capstone.Capstone.Service;
+package Capstone.Capstone.service;
 
 import Capstone.Capstone.entity.Recruit;
 import Capstone.Capstone.entity.User;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
-
+@Service
 public interface RecruitService {
     List<Recruit> selectBoardList();
     Recruit getRecruitById(Long id);

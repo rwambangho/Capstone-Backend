@@ -1,6 +1,6 @@
 package Capstone.Capstone.servicelmpl;
 
-import Capstone.Capstone.Service.UserService;
+import Capstone.Capstone.service.UserService;
 import Capstone.Capstone.dto.UserDto;
 import Capstone.Capstone.entity.ChatRoom;
 import Capstone.Capstone.entity.User;

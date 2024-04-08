@@ -2,8 +2,6 @@ package Capstone.Capstone.service;
 
 import Capstone.Capstone.dto.ChatMessageDto;
 import Capstone.Capstone.entity.ChatMessage;
-import Capstone.Capstone.entity.ChatRoom;
-import Capstone.Capstone.entity.User;
 
 import java.util.List;
 

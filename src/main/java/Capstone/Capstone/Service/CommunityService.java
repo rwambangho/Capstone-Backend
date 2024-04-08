@@ -1,13 +1,13 @@
-package Capstone.Capstone.Service;
+
+package Capstone.Capstone.service;
 import Capstone.Capstone.entity.Community;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface CommunityService {
     List<Community> findAll();
-    Optional<Community> findById(Long id);
+    Community findById(Long id);
     List<Community> findByTitle(String title);
 
     Community save(Community community);
@@ -17,11 +17,14 @@ public interface CommunityService {
 
     void delete(long id);
 
-    void addLike(Community community) ;
+    void addLike(long communityId,String userId) ;
+    void subLike(long communityId,String userId);
 
     List<Community> findPopularCommunity();
 
-    void addClickCount(long id);
+    void addClickCount(Long id);
+
+
 
 
 }
