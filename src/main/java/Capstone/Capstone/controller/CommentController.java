@@ -1,6 +1,7 @@
 package Capstone.Capstone.controller;
 
 
+import Capstone.Capstone.dto.CommentDto;
 import Capstone.Capstone.entity.Comment;
 import Capstone.Capstone.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,24 +23,27 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    private final ModelMapper modelMapper;
+
     @Autowired
-    CommentController(CommentService commentService){
+    CommentController(CommentService commentService, ModelMapper modelMapper){
         this.commentService=commentService;
+        this.modelMapper = modelMapper;
     }
 
-    @PostMapping("/save/{id}")
+    @PostMapping("/save")
     @Tag(name="Community API")
     @Operation(summary = "댓글 쓰기",description = "댓글을 저장해줍니다")
-    public ResponseEntity<String> addComment(@RequestBody Comment comment, @CookieValue(value = "JSESSIONID", defaultValue = "") String sessionId, HttpServletRequest request) {
-
+    public ResponseEntity<String> addComment(@RequestBody CommentDto commentDto, @CookieValue(value = "JSESSIONID", defaultValue = "") String sessionId, HttpServletRequest request) {
+        log.info("communityId={}",commentDto.getCommunityId());
         HttpSession session = request.getSession(false);
         if (session != null && sessionId.equals(session.getId())) {
             String nickName = (String) session.getAttribute("id");
-            comment.setNickName(nickName);
+            commentDto.setNickName(nickName);
         } else {
             return new ResponseEntity<>("로그아웃 상태입니다.", HttpStatus.BAD_REQUEST);
         }
-        commentService.addComment(comment);
+        commentService.addComment(commentDto);
         return new ResponseEntity<>("댓글 작성 완료.", HttpStatus.CREATED);
 
     }
@@ -46,9 +51,9 @@ public class CommentController {
     @GetMapping("/{id}")
     @Tag(name="Community API")
     @Operation(summary = "id로 댓글을 찾습니다",description = "댓글을 찾습니다")
-    public ResponseEntity<Comment> getCommentById(@PathVariable("id") Long id) {
-        Comment comment = commentService.getCommentById(id);
-        return new ResponseEntity<>(comment, HttpStatus.OK);
+    public ResponseEntity<CommentDto> getCommentById(@PathVariable("id") Long id) {
+        CommentDto commentDto = modelMapper.map(commentService.getCommentById(id),CommentDto.class);
+        return new ResponseEntity<>(commentDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

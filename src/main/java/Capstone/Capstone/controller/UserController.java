@@ -1,6 +1,7 @@
 package Capstone.Capstone.controller;
 
 
+import Capstone.Capstone.dto.UserDto;
 import Capstone.Capstone.entity.User;
 import Capstone.Capstone.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,10 +47,10 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "유효하지 않은 유저"),
     })
     @Operation(summary = "회원 찾기", description = "id를 기반으로 user를 찾습니다.")
-    public ResponseEntity<User> getUserById(@PathVariable("userId") String userId) {
-        User user = userService.getUserById(userId);
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<UserDto> getUserById(@PathVariable("userId") String userId) {
+        UserDto userDto = userService.convertToDto(userService.getUserById(userId));
+        if (userDto != null) {
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }

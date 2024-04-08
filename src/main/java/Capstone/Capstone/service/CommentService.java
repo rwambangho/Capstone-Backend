@@ -1,11 +1,13 @@
 package Capstone.Capstone.service;
 
+import Capstone.Capstone.dto.CommentDto;
 import Capstone.Capstone.entity.Comment;
 
 public interface CommentService {
-     Comment addComment(Comment comment);
+     Comment addComment(CommentDto commentDto);
      Comment getCommentById(Long id);
      void deleteComment(Long id);
 
+     Comment convertToEntity(CommentDto commentDto);
 
 }

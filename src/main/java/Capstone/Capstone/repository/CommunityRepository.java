@@ -14,5 +14,7 @@ public interface CommunityRepository extends JpaRepository<Community,Long> {
     List<Community> findTop5ByOrderByLikeCountDesc();
     List<Community> findByTitle(String title);
 
+    List<Community> findByTitleContaining(String title);
+
 }
 

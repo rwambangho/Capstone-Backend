@@ -3,7 +3,6 @@ package Capstone.Capstone.controller;
 import Capstone.Capstone.dto.CreateRoomDto;
 import Capstone.Capstone.dto.UserDto;
 import Capstone.Capstone.entity.ChatRoom;
-import Capstone.Capstone.entity.User;
 import Capstone.Capstone.service.ChatRoomSerivce;
 import Capstone.Capstone.service.UserService;
 import lombok.extern.slf4j.Slf4j;
