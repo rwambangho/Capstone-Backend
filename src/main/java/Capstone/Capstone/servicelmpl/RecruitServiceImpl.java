@@ -106,4 +106,8 @@ public class RecruitServiceImpl implements RecruitService {
         return distance;
     }
 
+    @Override
+    public List<Recruit> findRecruitsByKeywords(List<String> keywords){
+        return recruitRepository.findByKeywordsIn(keywords);
+    }
 }

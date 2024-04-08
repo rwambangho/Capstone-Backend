@@ -114,6 +114,13 @@ public class RecruitController {
         return new ResponseEntity<>(recruits, HttpStatus.OK);
     }
 
+    @GetMapping("/recruits/Keywords")
+    @Tag(name="RECRUIT API")
+    @Operation(summary = "키워드로 모집 글 검색하기", description = "키워드로 모집 글을 검색합니다.")
+    public ResponseEntity<List<Recruit>> searchRecruitsByKeywords(@RequestParam List<String> keywords){
+        List<Recruit> recruits = recruitService.findRecruitsByKeywords(keywords);
+        return new ResponseEntity<>(recruits, HttpStatus.OK);
+    }
 
 
 
