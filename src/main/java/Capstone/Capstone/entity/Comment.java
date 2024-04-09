@@ -31,11 +31,8 @@ public class Comment {
 
     @Column(name = "created_date")
     @CreatedDate
-    private String createdDate;
+    private String time;
 
-    @Column(name = "modified_date")
-    @LastModifiedDate
-    private String modifiedDate;
 
     public Comment() {
 

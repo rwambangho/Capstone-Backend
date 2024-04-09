@@ -61,27 +61,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public String sendSms(User user) {
 
-            String id = user.getId();
+
             //수신번호 형태에 맞춰 "-"을 ""로 변환
             String phoneNum = user.getPhoneNumber().replaceAll("-","");
 
-             User foundUser = userRepository.findById(id).orElse(null);
 
 
-            String receiverEmail = foundUser.getPassword();
             String verificationCode = smsUtil.generateStoreVerificationCode(phoneNum);
             smsUtil.sendOne(phoneNum, verificationCode);
 
-            //인증코드 유효기간 5분 설정
-           // redisUtil.setDataExpire(verificationCode, receiverEmail, 60 * 5L);
 
             return "SMS 전송 성공";
         }
 
         @Override
-        public boolean checkVerificationCode(User user,String verificationCode){
-            String phoneNum = user.getPhoneNumber().replaceAll("-","");
-            log.info("phoneNum={}",user.getPhoneNumber());
+        public boolean checkVerificationCode(String phoneNum,String verificationCode){
+            phoneNum=phoneNum.replaceAll("-","");
+
            return smsUtil.checkVerificationCode(phoneNum,verificationCode);
 
         }

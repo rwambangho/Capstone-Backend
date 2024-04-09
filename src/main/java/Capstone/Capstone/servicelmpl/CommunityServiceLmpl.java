@@ -88,7 +88,7 @@ public class CommunityServiceLmpl implements CommunityService {
 
         // base64로 인코딩된 데이터를 디코딩하여 바이너리 데이터로 변환
         byte[] imageBytes = Base64.getDecoder().decode(base64Image);
-        String imageurl="/Users/kimseungzzang/ideaProjects/capstone-frontend/src/postImage/"+fileName;
+        String imageurl="/Users/kimseungzzang/ideaProjects/capstone-frontend/public/images/"+fileName;
         community.setImage(imageurl);
         // 저장할 파일 경로 지정
         File outputFile = new File(imageurl);

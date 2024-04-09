@@ -9,4 +9,5 @@ public class CommentDto {
     private String comment;
     private Long communityId;
     private String nickName;
+    private String time;
 }

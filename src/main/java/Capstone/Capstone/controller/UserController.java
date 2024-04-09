@@ -1,6 +1,7 @@
 package Capstone.Capstone.controller;
 
 
+import Capstone.Capstone.dto.SmsDto;
 import Capstone.Capstone.dto.UserDto;
 import Capstone.Capstone.entity.User;
 
@@ -113,9 +114,9 @@ public class UserController {
     @PostMapping("/sendSMS/check")
     @Tag(name = "User API")
     @Operation(summary = "인증문자 확인", description = "입력한 번호가 인증 문자가 맞는지 확인합니다.")
-    public boolean checkVerificationCode(@RequestBody User user, @RequestParam("verificationCode") String verificationCode) {
+    public boolean checkVerificationCode(@RequestBody SmsDto smsDto) {
 
-        return userService.checkVerificationCode(user, verificationCode);
+        return userService.checkVerificationCode(smsDto.getPhoneNumber(),smsDto.getVerificationCode()) ;
 
 
     }

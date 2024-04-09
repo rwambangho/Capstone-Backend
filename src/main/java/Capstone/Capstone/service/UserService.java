@@ -10,7 +10,7 @@ public interface UserService {
     boolean authenticateUser(String Id, String password);
     String sendSms(User user);
 
-    boolean checkVerificationCode(User user, String verificationCode);
+    boolean checkVerificationCode(String PhoneNum, String verificationCode);
     void switchToDriverMode(User user);
 
     void registerDriverLicense(User user, String driverLicense);

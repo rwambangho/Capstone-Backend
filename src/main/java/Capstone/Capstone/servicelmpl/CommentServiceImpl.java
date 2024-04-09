@@ -62,6 +62,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment=new Comment();
         comment.setComment(commentDto.getComment());
         comment.setNickName(commentDto.getNickName());
+        comment.setTime(commentDto.getTime());
         comment.setId(0L);
         return comment;
     }
