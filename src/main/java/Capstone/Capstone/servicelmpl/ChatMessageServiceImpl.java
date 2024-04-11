@@ -54,6 +54,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         chatMessage.setId(chatMessageDto.getId());
         log.info("setMessage={}",chatMessageDto.getMessage());
         chatMessage.setMessage(chatMessageDto.getMessage());
+        chatMessage.setTimestamp(chatMessageDto.getTimestamp());
 
         return chatMessage;
     }
@@ -63,7 +64,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     chatMessageDto.setUserDto(userService.convertToDto(chatMessage.getUser()));
     chatMessageDto.setMessage(chatMessage.getMessage());
     chatMessageDto.setRoomId(chatMessage.getChatRoom().getId());
-    chatMessageDto.setSentTime(chatMessage.getSentTime());
+    chatMessageDto.setTimestamp(chatMessage.getTimestamp());
     return  chatMessageDto;
 
     }

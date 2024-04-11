@@ -48,12 +48,15 @@ public class ChatMessageController {
         JSONObject obj = new JSONObject(text);
         String sender=obj.getString("sender");
         String realMessage=obj.getString("message");
+        String timeStamp=obj.getString("timestamp");
+
 
         userDto.setId(sender);
         chatMessageDto.setUserDto(userDto);
         chatMessageDto.setRoomId(roomId);
         chatMessageDto.setMessage(realMessage);
         chatMessageDto.setId(0L);
+        chatMessageDto.setTimestamp(timeStamp);
         log.info("chatMessageDto={},{},{},{}",chatMessageDto.getId(),chatMessageDto.getRoomId(),chatMessageDto.getUserDto(),chatMessageDto.getMessage());
         ChatMessage chatMessage=chatMessageService.convertToEntity(chatMessageDto);
         log.info("chatMessage={},{},{},{}",chatMessage.getId(),chatMessage.getChatRoom(),chatMessage.getUser(),chatMessage.getMessage());

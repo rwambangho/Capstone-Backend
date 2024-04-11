@@ -15,4 +15,14 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom,Long> {
             "GROUP BY cr.id " +
             "HAVING COUNT(DISTINCT u.id) = :userCount")
     List<Long> findChatRoomIdByUserIds(List<String> userIds, int userCount);
+
+    @Query("SELECT cr.id FROM ChatRoom cr " +
+            "JOIN cr.users u " +
+            "WHERE u.id = :userId")
+    List<Long> findChatRoomIdsByUserId( String userId);
+
+    @Query("SELECT u.id FROM User u " +
+            "JOIN u.chatRooms cr " +
+            "WHERE cr.id = :chatRoomId AND u.id <> :userId")
+    List<String> findOtherUserIdsInChatRoom(Long chatRoomId, String userId);
 }

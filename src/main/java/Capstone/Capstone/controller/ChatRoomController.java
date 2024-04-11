@@ -14,6 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @RestController
 public class ChatRoomController {
@@ -29,11 +32,9 @@ public class ChatRoomController {
 
     @PostMapping("/Chat")
     public ResponseEntity<Long> CreateChatRoom (@RequestBody CreateRoomDto createRoomDto){
-        log.info("{},{}",createRoomDto.getUserId1(),createRoomDto.getUserId2());
+
         UserDto user1=UserDto.convertToDto(userService.getUserById(createRoomDto.getUserId1()));
-        log.info("user1={}",user1);
         UserDto user2=UserDto.convertToDto(userService.getUserById(createRoomDto.getUserId2()));
-        log.info("user2={}",user2);
         Long chatRoomId;
         if(chatRoomSerivce.hasChatRoom(user1.getId(),user2.getId())) {
            chatRoomId=chatRoomSerivce.getChatRoom(user1.getId(),user2.getId());
@@ -50,5 +51,19 @@ public class ChatRoomController {
     public ResponseEntity<Long> GetChatRoomNumber(@RequestParam String userId1,@RequestParam String userId2){
         return new ResponseEntity<>(chatRoomSerivce.getChatRoom(userId1,userId2),HttpStatus.OK);
     }
+
+    @GetMapping("/getAllChatRoomNumber")
+    public ResponseEntity<List<String>>GetAllChatRoomNumber(@RequestParam String userId){
+        List<Long>chatRooms=chatRoomSerivce.getAllChatRoom(userId);
+        List<String> allOtherUsers = new ArrayList<>();
+
+        for (Long chatRoomId : chatRooms) {
+           String user = chatRoomSerivce.getUserInChatRoom(userId, chatRoomId);
+            allOtherUsers.add(user);
+        }
+        return new ResponseEntity<>(allOtherUsers,HttpStatus.OK);
+    }
+
+
 
 }

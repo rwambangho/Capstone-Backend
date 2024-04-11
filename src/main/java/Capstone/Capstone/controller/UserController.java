@@ -66,7 +66,7 @@ public class UserController {
         User findUser=userService.getUserById(Id);
         boolean isAuthenticated = userService.authenticateUser(Id, password);
         if (isAuthenticated) {
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(true);
             session.setAttribute("id",findUser.getId());
             return new ResponseEntity<>(findUser.getId(), HttpStatus.OK);
         } else {

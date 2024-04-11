@@ -18,7 +18,7 @@ public class ChatMessageDto {
     private Long roomId;
     private UserDto userDto;
     private String message;
-    private LocalDateTime sentTime;
+    private String timestamp;
 
     // 생성자
     public ChatMessageDto(ChatMessage chatMessage) {
