@@ -22,4 +22,5 @@ public class CommunityDto {
     private long clickCount;
     private List<CommentDto> commentsDto;
     private List<LikeDto> likesDto;
+    private long commentSum;
 }

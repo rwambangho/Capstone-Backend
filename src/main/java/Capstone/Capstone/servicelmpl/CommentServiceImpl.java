@@ -66,4 +66,10 @@ public class CommentServiceImpl implements CommentService {
         comment.setId(0L);
         return comment;
     }
+
+    @Override
+    public Long allCommentById(Long communityId) {
+       return commentRepository.countCommentsByCommunityId(communityId);
+    }
+
 }

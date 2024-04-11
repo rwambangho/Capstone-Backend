@@ -10,4 +10,6 @@ public interface CommentService {
 
      Comment convertToEntity(CommentDto commentDto);
 
+     Long allCommentById(Long communityId);
+
 }

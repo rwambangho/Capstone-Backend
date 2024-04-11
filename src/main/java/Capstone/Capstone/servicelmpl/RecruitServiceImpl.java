@@ -43,7 +43,7 @@ public class RecruitServiceImpl implements RecruitService {
         if (user.isDriver() && (user.getDriverLicense() == null || user.getDriverLicense().isEmpty())) {
             throw new IllegalStateException("운전면허증 등록이 필요합니다.");
         } //사용자가 운전자 모드인 경우 운전면허증이 등록되어 있는지 확인하기
-        recruit.setIsDriverPost(user.isDriver());
+        recruit.setDriverPost(user.isDriver());
         return recruitRepository.save(recruit);
     }
 
@@ -108,6 +108,10 @@ public class RecruitServiceImpl implements RecruitService {
         return distance;
     }
 
+    @Override
+    public List<Recruit> findRecruitsByKeywords(List<String> keywords){
+        return recruitRepository.findByKeywordsIn(keywords);
+    }
 }
 
 

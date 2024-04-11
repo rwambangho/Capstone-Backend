@@ -25,6 +25,7 @@ public class Community {
     private Long likeCount;
     private long clickCount;
 
+
     @OneToMany(mappedBy = "community", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @OrderBy("id asc") // 댓글 정렬
     private List<Comment> comments;
@@ -36,5 +37,5 @@ public class Community {
 
     }
 
-    // 생성자, getter, setter 등 필요한 코드 추가
+
 }

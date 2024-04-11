@@ -5,6 +5,7 @@ import Capstone.Capstone.dto.CommentDto;
 import Capstone.Capstone.dto.CommunityDto;
 import Capstone.Capstone.dto.LikeDto;
 import Capstone.Capstone.entity.Community;
+import Capstone.Capstone.service.CommentService;
 import Capstone.Capstone.service.CommunityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,11 +30,13 @@ import static java.util.Arrays.stream;
 public class CommunityController {
 
     private final CommunityService communityService;
+    private final CommentService commentService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public CommunityController(CommunityService communityService, ModelMapper modelMapper) {
+    public CommunityController(CommunityService communityService, CommentService commentService, ModelMapper modelMapper) {
         this.communityService = communityService;
+        this.commentService = commentService;
 
         this.modelMapper = modelMapper;
     }
@@ -44,8 +47,13 @@ public class CommunityController {
     public ResponseEntity<List<CommunityDto>> getAllCommunities() {
         List<Community> communities = communityService.findAll();
        List<CommunityDto>communityDtos=communities.stream()
-                .map(community -> modelMapper.map(community, CommunityDto.class))
+                .map(
+                        community -> modelMapper.map(community, CommunityDto.class)
+                )
                 .toList();
+        communityDtos.forEach(community -> {
+            community.setCommentSum(commentService.allCommentById(community.getId()));
+        });
 
 
         return new ResponseEntity<>(communityDtos, HttpStatus.OK);
