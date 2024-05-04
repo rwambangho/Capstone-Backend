@@ -19,6 +19,7 @@ public class UserDto {
     private Date birthdate;
     private String phoneNumber;
     private String id;
+    private String profileImage;
     private String password;
     private String nickname;
     private boolean isDriver; //현재 운전자 모드인지 아닌지

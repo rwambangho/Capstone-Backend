@@ -37,7 +37,7 @@ public class CommentController {
         log.info("communityId={}",commentDto.getCommunityId());
         HttpSession session = request.getSession(false);
         if (session != null && sessionId.equals(session.getId())) {
-            String nickName = (String) session.getAttribute("id");
+            String nickName = (String) session.getAttribute("nickname");
             commentDto.setNickName(nickName);
         } else {
             return new ResponseEntity<>("로그아웃 상태입니다.", HttpStatus.BAD_REQUEST);

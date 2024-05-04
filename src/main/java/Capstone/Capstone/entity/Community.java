@@ -31,7 +31,7 @@ public class Community {
     private List<Comment> comments;
 
 
-    @OneToMany(mappedBy = "community")
+    @OneToMany(mappedBy = "community",cascade = CascadeType.REMOVE)
     private List<Like> likes;
     public Community() {
 

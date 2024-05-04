@@ -60,7 +60,7 @@ public class UserController {
     @PostMapping("/login")
     @Tag(name = "User API")
     @Operation(summary = "로그인", description = "id와 password를 기반으로 로그인합니다.")
-    public ResponseEntity<String> login(@RequestBody User user, HttpServletRequest request) {
+    public ResponseEntity<UserDto> login(@RequestBody User user, HttpServletRequest request) {
         String Id=user.getId();
         String password=user.getPassword();
         User findUser=userService.getUserById(Id);
@@ -68,9 +68,13 @@ public class UserController {
         if (isAuthenticated) {
             HttpSession session = request.getSession(true);
             session.setAttribute("id",findUser.getId());
-            return new ResponseEntity<>(findUser.getId(), HttpStatus.OK);
+            session.setAttribute("nickname",findUser.getNickname());
+            UserDto userDto=new UserDto();
+            userDto.setId(findUser.getId());
+            userDto.setNickname(findUser.getNickname());
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Login failed", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -83,6 +87,15 @@ public class UserController {
         if(session!=null&&session.getId().equals(sessionId)){
             session.invalidate();
         }
+    }
+
+    @GetMapping("/checkId")
+    public ResponseEntity<Boolean> checkId(@RequestParam String id){
+        if(userService.getUserById(id)!=null)
+        {
+            return new ResponseEntity<>(false,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(true,HttpStatus.OK);
     }
 
 
@@ -100,6 +113,12 @@ public class UserController {
     public ResponseEntity<Void> changePassword(@PathVariable("userId") String userId, @RequestParam String newPassword) {
         userService.updateUserPassword(userId, newPassword);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PutMapping("/changeInform")
+    public  ResponseEntity<Void> changeUserInform(@RequestBody UserDto userDto)
+    {
+        userService.UpdateUserInform(userDto);
+        return  new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/sendSMS")

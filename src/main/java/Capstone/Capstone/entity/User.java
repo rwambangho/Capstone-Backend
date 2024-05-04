@@ -23,7 +23,7 @@ public class User {
     private String name;
     private Date birthdate;
     private String phoneNumber;
-
+    private String profileImage;
     private String password;
     private String nickname;
 

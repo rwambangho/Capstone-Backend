@@ -74,7 +74,7 @@ public class CommunityController {
 
         HttpSession session = request.getSession(false);
         if (session != null && sessionId.equals(session.getId())) {
-            String nickName = (String) session.getAttribute("id");
+            String nickName = (String) session.getAttribute("nickname");
             log.info("id={}",nickName);
             community.setNickName(nickName);
             log.info("nickName={}",community.getNickName());
@@ -110,7 +110,8 @@ public class CommunityController {
             String findTitle=community.getTitle();
             String findNickName = community.getNickName();
             log.info("findTitle={} findNickName={}",findTitle,findNickName);
-            String nickName = (String) session.getAttribute("nickName");
+            String nickName = (String) session.getAttribute("nickname");
+            log.info("nickName={}",nickName);
                 if (findNickName.equals(nickName)) {
                     communityService.delete(id);
                     return new ResponseEntity<>("삭제 성공",HttpStatus.OK);

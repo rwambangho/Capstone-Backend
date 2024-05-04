@@ -15,6 +15,9 @@ public interface UserService {
 
     void registerDriverLicense(User user, String driverLicense);
 
+    void UpdateUserInform(UserDto userDto);
+
+    String saveImage(String image);
 
     public User convertToEntity(UserDto userDto);
 

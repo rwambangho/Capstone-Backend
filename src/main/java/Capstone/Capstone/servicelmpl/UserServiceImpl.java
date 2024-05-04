@@ -1,6 +1,7 @@
 package Capstone.Capstone.servicelmpl;
 
 import Capstone.Capstone.dto.UserDto;
+import Capstone.Capstone.entity.Community;
 import Capstone.Capstone.entity.User;
 import Capstone.Capstone.utils.SmsUtil;
 import Capstone.Capstone.repository.UserRepository;
@@ -9,6 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Base64;
+import java.util.Date;
 import java.util.Optional;
 
 @Slf4j
@@ -28,7 +35,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveUser(User user) {
-        // 저장 전에 중복 이메일 체크 등 필요한 로직 수행 가능
         userRepository.save(user);
 
     }
@@ -97,6 +103,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void UpdateUserInform(UserDto userDto) {
+        Optional<User> user=userRepository.findById(userDto.getId());
+        if (user.isPresent()){
+           User findUser=user.get();
+
+           findUser.setNickname(userDto.getNickname());
+           findUser.setBirthdate(userDto.getBirthdate());
+           findUser.setPhoneNumber(userDto.getPhoneNumber());
+           findUser.setName(userDto.getName());
+           findUser.setId(userDto.getId());
+           findUser.setProfileImage(saveImage(userDto.getProfileImage()));
+           userRepository.save(findUser);
+        }
+
+    }
+
+    @Override
     public void checkOutUser() {
 
 
@@ -110,12 +133,43 @@ public class UserServiceImpl implements UserService {
     }
 @Override
     public UserDto convertToDto(User user){
+
         UserDto userDto=new UserDto();
+        userDto.setName(user.getName());
         userDto.setId(user.getId());
         userDto.setNickname(user.getNickname());
+        userDto.setPhoneNumber(user.getPhoneNumber());
+        userDto.setProfileImage(user.getProfileImage());
         return userDto;
 }
+    @Override
+    public String saveImage(String image) {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String fileName = "image_" + timeStamp + ".jpg"; // 파일 확장자에 맞게 변경
 
+        // 이미지 데이터(dataURL) 추출
+        String imageData = image;
+
+        // dataURL에서 실제 데이터 부분만 분리 (콤마 이후의 부분)
+        String base64Image = imageData.split(",")[1];
+
+        // base64로 인코딩된 데이터를 디코딩하여 바이너리 데이터로 변환
+        byte[] imageBytes = Base64.getDecoder().decode(base64Image);
+        String imageUrl="/Users/kimseungzzang/ideaProjects/capstone-frontend/public/images/"+fileName;
+
+        // 저장할 파일 경로 지정
+        File outputFile = new File(imageUrl);
+
+        try (OutputStream outputStream = new FileOutputStream(outputFile)) {
+            outputStream.write(imageBytes);
+        }
+
+        catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return  imageUrl;
+    }
 
 
 
