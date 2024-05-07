@@ -33,11 +33,11 @@ public class ChatRoomController {
     @PostMapping("/Chat")
     public ResponseEntity<Long> CreateChatRoom (@RequestBody CreateRoomDto createRoomDto){
 
-        UserDto user1=UserDto.convertToDto(userService.getUserById(createRoomDto.getUserId1()));
-        UserDto user2=UserDto.convertToDto(userService.getUserById(createRoomDto.getUserId2()));
+        UserDto user1=UserDto.convertToDto(userService.getUserByNickName(createRoomDto.getUserId1()));
+        UserDto user2=UserDto.convertToDto(userService.getUserByNickName(createRoomDto.getUserId2()));
         Long chatRoomId;
-        if(chatRoomSerivce.hasChatRoom(user1.getId(),user2.getId())) {
-           chatRoomId=chatRoomSerivce.getChatRoom(user1.getId(),user2.getId());
+        if(chatRoomSerivce.hasChatRoom(user1.getNickname(),user2.getNickname())) {
+           chatRoomId=chatRoomSerivce.getChatRoom(user1.getNickname(),user2.getNickname());
             return new ResponseEntity<>(chatRoomId, HttpStatus.OK);
         }
         else {
@@ -54,6 +54,7 @@ public class ChatRoomController {
 
     @GetMapping("/getAllChatRoomNumber")
     public ResponseEntity<List<String>>GetAllChatRoomNumber(@RequestParam String userId){
+        log.info("{}",userId);
         List<Long>chatRooms=chatRoomSerivce.getAllChatRoom(userId);
         List<String> allOtherUsers = new ArrayList<>();
 

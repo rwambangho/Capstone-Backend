@@ -10,6 +10,8 @@ public interface UserService {
     boolean authenticateUser(String Id, String password);
     String sendSms(User user);
 
+    User getUserByNickName(String nickName);
+
     boolean checkVerificationCode(String PhoneNum, String verificationCode);
     void switchToDriverMode(User user);
 
