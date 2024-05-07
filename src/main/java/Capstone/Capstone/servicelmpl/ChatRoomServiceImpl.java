@@ -61,7 +61,9 @@ public class ChatRoomServiceImpl implements Capstone.Capstone.service.ChatRoomSe
         List<String> users = new ArrayList<>();
         users.add(userId1);
         users.add(userId2);
+        log.info("{},{}",userId1,userId2);
         List<Long> chatRoomIds = chatRoomRepository.findChatRoomIdByUserIds(users, 2);
+        log.info("{}",chatRoomIds);
         if (chatRoomIds.isEmpty()) {
             return false;
         } else

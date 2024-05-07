@@ -81,7 +81,12 @@ public class UserServiceImpl implements UserService {
             return "SMS 전송 성공";
         }
 
-        @Override
+    @Override
+    public User getUserByNickName(String nickName) {
+        return userRepository.findByNickname(nickName);
+    }
+
+    @Override
         public boolean checkVerificationCode(String phoneNum,String verificationCode){
             phoneNum=phoneNum.replaceAll("-","");
 
@@ -102,6 +107,8 @@ public class UserServiceImpl implements UserService {
         user.setDriverLicense(driverLicense);
         userRepository.save(user);
     }
+
+
 
     @Override
     public void UpdateUserInform(UserDto userDto) {

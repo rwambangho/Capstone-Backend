@@ -5,6 +5,8 @@ import Capstone.Capstone.dto.ChatMessageDto;
 import Capstone.Capstone.dto.UserDto;
 import Capstone.Capstone.entity.ChatMessage;
 import Capstone.Capstone.service.ChatMessageService;
+import Capstone.Capstone.service.UserService;
+import Capstone.Capstone.servicelmpl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -28,11 +30,13 @@ public class ChatMessageController {
 
 
 
+    private final UserServiceImpl userService;
 
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final ChatMessageService chatMessageService;
     @Autowired
-    public ChatMessageController(SimpMessagingTemplate simpMessagingTemplate, ChatMessageService chatMessageService) {
+    public ChatMessageController(UserServiceImpl userService, SimpMessagingTemplate simpMessagingTemplate, ChatMessageService chatMessageService) {
+        this.userService = userService;
         this.simpMessagingTemplate = simpMessagingTemplate;
         this.chatMessageService = chatMessageService;
     }
@@ -40,26 +44,23 @@ public class ChatMessageController {
 
     @MessageMapping("/chat/{roomId}")
     public void sendMessage(@Payload String message,@DestinationVariable Long roomId){
-        log.info("message={}",message);
-        log.info("roomId={}",roomId);
         ChatMessageDto chatMessageDto=new ChatMessageDto();
-        UserDto userDto=new UserDto();
+
         String text =message;
         JSONObject obj = new JSONObject(text);
         String sender=obj.getString("sender");
         String realMessage=obj.getString("message");
         String timeStamp=obj.getString("timestamp");
+        UserDto userDto= userService.convertToDto(userService.getUserByNickName(sender));
 
 
-        userDto.setId(sender);
         chatMessageDto.setUserDto(userDto);
         chatMessageDto.setRoomId(roomId);
         chatMessageDto.setMessage(realMessage);
         chatMessageDto.setId(0L);
         chatMessageDto.setTimestamp(timeStamp);
-        log.info("chatMessageDto={},{},{},{}",chatMessageDto.getId(),chatMessageDto.getRoomId(),chatMessageDto.getUserDto(),chatMessageDto.getMessage());
         ChatMessage chatMessage=chatMessageService.convertToEntity(chatMessageDto);
-        log.info("chatMessage={},{},{},{}",chatMessage.getId(),chatMessage.getChatRoom(),chatMessage.getUser(),chatMessage.getMessage());
+        log.info("chatMessage={},{},{},{}",chatMessage.getId(),chatMessage.getChatRoom(),sender,chatMessage.getMessage());
 
         chatMessageService.createChat(chatMessage);
 
