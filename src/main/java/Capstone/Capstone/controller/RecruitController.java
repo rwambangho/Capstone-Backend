@@ -56,7 +56,7 @@ public class RecruitController {
         if (session != null && sessionId.equals(session.getId())) {
             String nickName = (String) session.getAttribute("id");
             User user=userService.getUserById(nickName);
-
+            log.info("{}",user.getAvgStar());
             Recruit createdRecruit = recruitService.createRecruit(recruit, user);
             log.info("recruit={}",createdRecruit);
 

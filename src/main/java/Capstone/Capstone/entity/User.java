@@ -29,6 +29,8 @@ public class User {
 
     private boolean isDriver; //현재 운전자 모드인지 아닌지
     private String driverLicense; //운전면허증 등록여부
+    private double avgStar = 0.0; //별점 평균
+    private int star = 0; //사용자 별점
 
     public void setIsDriver(boolean isDriver) {
         this.isDriver = isDriver;
@@ -43,6 +45,7 @@ public class User {
 
     @ManyToMany(mappedBy = "users")
     private Set<ChatRoom> chatRooms = new HashSet<>();
+
 
 
 }

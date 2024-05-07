@@ -18,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+
+
 @Slf4j
 @RestController
 @RequestMapping("/user")
@@ -77,6 +80,7 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
     }
+
 
     @GetMapping("/logout")
     @Tag(name="User API")
@@ -143,8 +147,8 @@ public class UserController {
     @PostMapping("/{userId}/switchToDriverMode")
     @Tag(name="User API")
     @Operation(summary = "운전자모드 변경",description = "운전자모드로 전환합니다.")
-    public ResponseEntity<?> switchToDriverMode(@PathVariable String id) {
-        User user = userService.getUserById(id);
+    public ResponseEntity<Void> switchToDriverMode(@PathVariable String userId) {
+        User user = userService.getUserById(userId);
         userService.switchToDriverMode(user);
         return ResponseEntity.ok().build();
     }
@@ -152,11 +156,23 @@ public class UserController {
     @PostMapping("/{userId}/registerDriverLicense")
     @Tag(name="User API")
     @Operation(summary = "운전면허증 등록",description = "운전면허증을 등록합니다.")
-    public ResponseEntity<?> registerDriverLicense(@PathVariable String id, @RequestBody String driverLicense) {
-        User user = userService.getUserById(id);
+    public ResponseEntity<Void> registerDriverLicense(@PathVariable String userId, @RequestBody String driverLicense) {
+        User user = userService.getUserById(userId);
         userService.registerDriverLicense(user, driverLicense);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("{userId}/star")
+    @Tag(name="User API")
+    @Operation(summary = "사용자 별점",description = "별점을 등록합니다.")
+    public ResponseEntity<User> rateUser(@PathVariable String userId, @RequestParam double star) {
+        User user = userService.getUserById(userId);
+
+        userService.addRating(user, star);
+
+        return ResponseEntity.ok().build();
+    }
+
 
 
 }

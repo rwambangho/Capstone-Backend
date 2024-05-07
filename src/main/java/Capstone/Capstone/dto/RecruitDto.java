@@ -17,8 +17,10 @@ public class RecruitDto {
     private String username;
     private Long id;
     private int star;
+    private double distance;
     private List<String> keywords;
     private String destination;
+    private String departure;
     private LocalDate departureDate;
     private Double departureLatitude;
     private Double departureLongitude;

@@ -21,7 +21,10 @@ public interface RecruitService {
     List<Recruit> findLatestRecruits();
 
     List<Recruit> searchRecruits(LocalDate departureDate, String destination);
+
     List<Recruit> findRecruitsByDistance(double userLat, double userLon);
+
+    double calculateDistance(double lat1, double lon1, double lat2, double lon2);
 
     List<Recruit> findRecruitsByKeywords(List<String> keywords);
 

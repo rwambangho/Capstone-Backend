@@ -8,7 +8,9 @@ import Capstone.Capstone.repository.UserRepository;
 import Capstone.Capstone.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,7 +46,6 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepository.findById(Id);
         return optionalUser.orElse(null);
     }
-
     @Override
     public void updateUserPassword(String Id, String newPassword) {
 
@@ -113,6 +114,7 @@ public class UserServiceImpl implements UserService {
            findUser.setPhoneNumber(userDto.getPhoneNumber());
            findUser.setName(userDto.getName());
            findUser.setId(userDto.getId());
+           findUser.setAvgStar(userDto.getStar());
            findUser.setProfileImage(saveImage(userDto.getProfileImage()));
            userRepository.save(findUser);
         }
@@ -137,9 +139,11 @@ public class UserServiceImpl implements UserService {
         UserDto userDto=new UserDto();
         userDto.setName(user.getName());
         userDto.setId(user.getId());
+        userDto.setBirthdate(user.getBirthdate());
         userDto.setNickname(user.getNickname());
         userDto.setPhoneNumber(user.getPhoneNumber());
         userDto.setProfileImage(user.getProfileImage());
+        userDto.setAvgStar(user.getAvgStar());
         return userDto;
 }
     @Override
@@ -169,6 +173,18 @@ public class UserServiceImpl implements UserService {
 
         }
         return  imageUrl;
+    }
+@Override
+    public void addRating(User user, double star) {
+        double totalStar = user.getAvgStar() * user.getStar();
+        totalStar += star;
+        int newStarCount = user.getStar() + 1;
+        double newAverageStar = totalStar / newStarCount;
+
+        user.setStar(newStarCount);
+        user.setAvgStar(newAverageStar);
+
+        userRepository.save(user);
     }
 
 

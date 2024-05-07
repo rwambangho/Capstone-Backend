@@ -6,6 +6,8 @@ public interface UserService {
     void saveUser(User user);
 
     User getUserById(String Id);
+
+
     void updateUserPassword(String Id, String newPassword);
     boolean authenticateUser(String Id, String password);
     String sendSms(User user);
@@ -24,5 +26,7 @@ public interface UserService {
     public  UserDto convertToDto(User user);
 
     void checkOutUser();
+
+    void addRating(User user, double rating);
 
 }
