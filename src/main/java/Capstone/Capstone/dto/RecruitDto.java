@@ -11,20 +11,24 @@ import java.util.List;
 @Getter
 @Setter
 public class RecruitDto {
-    private int idxNum;
     private String title;
     private String contents;
-    private String username;
-    private Long id;
-    private int star;
-    private double distance;
+    private String nickname;
+    private int distance;
     private List<String> keywords;
     private String destination;
     private String departure;
     private LocalDate departureDate;
-    private Double departureLatitude;
-    private Double departureLongitude;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private boolean isDriverPost; //운전자가 작성한 글인지 아닌지
+    private String message;
+    private int participant;
+    private int maxParticipant;
+    private List<String> users;
+    private List<String> bookingUsers;
+    private boolean isDriverPost;
+    private double  departureX;
+    private double  departureY;
+    private double arrivalX;
+    private double arrivalY;
 }
+

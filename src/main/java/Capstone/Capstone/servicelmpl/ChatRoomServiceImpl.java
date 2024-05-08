@@ -77,6 +77,7 @@ public class ChatRoomServiceImpl implements Capstone.Capstone.service.ChatRoomSe
 
     @Override
     public String getUserInChatRoom(String userId, long chatRoomId) {
+        log.info("{}.{}",userId,chatRoomId);
         return chatRoomRepository.findOtherUserIdsInChatRoom(chatRoomId,userId).get(0);
     }
 

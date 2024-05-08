@@ -1,5 +1,6 @@
 package Capstone.Capstone.service;
 
+import Capstone.Capstone.dto.RecruitDto;
 import Capstone.Capstone.entity.Recruit;
 import Capstone.Capstone.entity.User;
 import org.springframework.stereotype.Service;
@@ -9,10 +10,12 @@ import java.util.List;
 
 @Service
 public interface RecruitService {
-    List<Recruit> selectBoardList();
+    List<Recruit> selectDriverBoardList();
+    List<Recruit> selectPassengerBoardList();
+
     Recruit getRecruitById(Long id);
 
-    Recruit createRecruit(Recruit recruit, User user);
+    Recruit createRecruit(RecruitDto recruitDto);
 
     void deleteRecruit(Long id);
 
@@ -24,8 +27,14 @@ public interface RecruitService {
 
     List<Recruit> findRecruitsByDistance(double userLat, double userLon);
 
-    double calculateDistance(double lat1, double lon1, double lat2, double lon2);
+    int calculateDistance(double lat1, double lon1, double lat2, double lon2);
 
     List<Recruit> findRecruitsByKeywords(List<String> keywords);
 
+    Recruit ConvertToEntity(RecruitDto recruitDto);
+
+    RecruitDto ConvertToDto(Recruit recruit);
+    void addParticipant(Long idxNum);
+    boolean addBookingList(String user, Long idxNum);
+    void subBookingList(String user, Long idxNum);
 }

@@ -56,6 +56,7 @@ public class ChatRoomController {
     public ResponseEntity<List<String>>GetAllChatRoomNumber(@RequestParam String userId){
         log.info("{}",userId);
         List<Long>chatRooms=chatRoomSerivce.getAllChatRoom(userId);
+        log.info("{}",chatRooms);
         List<String> allOtherUsers = new ArrayList<>();
 
         for (Long chatRoomId : chatRooms) {

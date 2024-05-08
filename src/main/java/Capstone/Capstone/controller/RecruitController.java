@@ -1,13 +1,12 @@
 package Capstone.Capstone.controller;
 
+import Capstone.Capstone.dto.RecruitDto;
+import Capstone.Capstone.dto.DistanceDto;
 import Capstone.Capstone.service.RecruitService;
 import Capstone.Capstone.service.UserService;
 import Capstone.Capstone.entity.Recruit;
-import Capstone.Capstone.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,11 +27,19 @@ public class RecruitController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/recruits")
+    @GetMapping("/recruits/driver")
     @Tag(name="RECRUIT API")
     @Operation(summary = "모집 글 목록보기",description = "모집 글을 불러옵니다.")
-    public ResponseEntity<List<Recruit>> selectBoardList() {
-        List<Recruit> recruits = recruitService.selectBoardList();
+    public ResponseEntity<List<Recruit>> selectDriverBoardList() {
+        List<Recruit> recruits = recruitService.selectDriverBoardList();
+        return new ResponseEntity<>(recruits, HttpStatus.OK);
+    }
+
+    @GetMapping("/recruits/passenger")
+    @Tag(name="RECRUIT API")
+    @Operation(summary = "모집 글 목록보기",description = "모집 글을 불러옵니다.")
+    public ResponseEntity<List<Recruit>> selectPassengerBoardList() {
+        List<Recruit> recruits = recruitService.selectPassengerBoardList();
         return new ResponseEntity<>(recruits, HttpStatus.OK);
     }
 
@@ -51,21 +58,19 @@ public class RecruitController {
     @PostMapping("/recruits")
     @Tag(name="RECRUIT API")
     @Operation(summary = "모집 글 생성",description = "모집 글을 생성합니다.")
-    public ResponseEntity<Recruit> createRecruit(@RequestBody Recruit recruit, @CookieValue(value = "JSESSIONID", defaultValue = "") String sessionId, HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null && sessionId.equals(session.getId())) {
-            String nickName = (String) session.getAttribute("id");
-            User user=userService.getUserById(nickName);
-            log.info("{}",user.getAvgStar());
-            Recruit createdRecruit = recruitService.createRecruit(recruit, user);
+    public ResponseEntity<Recruit> createRecruit(@RequestBody RecruitDto recruitDto) {
+
+            int distance=recruitService.calculateDistance(recruitDto.getDepartureX(), recruitDto.getDepartureY(), recruitDto.getArrivalX(), recruitDto.getArrivalY());
+            log.info("distance={}",distance);
+            recruitDto.setDistance(distance);
+            Recruit createdRecruit = recruitService.createRecruit(recruitDto);
             log.info("recruit={}",createdRecruit);
 
             return new ResponseEntity<>(createdRecruit, HttpStatus.CREATED);
-        }
 
 
 
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+
 
     }
 
@@ -122,6 +127,30 @@ public class RecruitController {
         return new ResponseEntity<>(recruits, HttpStatus.OK);
     }
 
+    @PostMapping("/recruits/booking")
+    public ResponseEntity<Boolean> Booking(@RequestParam String nickname,@RequestParam long idxNum){
+            boolean result;
+          result= recruitService.addBookingList(nickname,idxNum);
+           return new ResponseEntity<>(result,HttpStatus.OK);
 
+
+    }
+
+    @PostMapping("/recruits/addBooking")
+    public ResponseEntity<Boolean> adddBooking(@RequestParam String nickname,@RequestParam long idxNum) {
+        if (recruitService.getRecruitById(idxNum).getParticipant() < recruitService.getRecruitById(idxNum).getMaxParticipant()) {
+            recruitService.addParticipant(idxNum);
+            recruitService.subBookingList(nickname, idxNum);
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        return  new ResponseEntity<>(false,HttpStatus.OK);
+    }
+
+    @PostMapping("recruits/distance")
+    public ResponseEntity<Integer> calculate(@RequestBody DistanceDto distanceDto){
+        int distance= recruitService.calculateDistance(distanceDto.getDepartureX(), distanceDto.getDeparturey(), distanceDto.getArrivalX(), distanceDto.getArrivaly());
+        log.info("distance={}",distance);
+        return new ResponseEntity<>(distance,HttpStatus.OK);
+    }
 
 }

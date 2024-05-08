@@ -1,5 +1,6 @@
 package Capstone.Capstone.entity;
 
+import Capstone.Capstone.dto.DistanceDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +21,7 @@ public class Recruit {
     private int idxNum;
     private String title;
     private String contents;
-    private String username;
-    private Long id;
+    private String nickname;
 
 
     @ElementCollection
@@ -30,17 +30,26 @@ public class Recruit {
     private String destination; //목적지
     private String departure;
     private LocalDate departureDate; //출발일자
-    private Double departureLatitude; //출발지 위도
-    private Double departureLongitude; //출발지 경도
-    @Column(nullable = false, columnDefinition = "0km")
-    private double distance; //사용자 실시간 위치에서 모집글 사용자 위치까지 거리
+    private int distance; //사용자 실시간 위치에서 모집글 사용자 위치까지 거리
     private boolean isDriverPost; //운전자가 작성한 글인지 아닌지
+    private int participant;
+    private int maxParticipant;
 
-
+    private String message;
+    @ElementCollection
+    private List<String> users = new ArrayList<>();
+    @ElementCollection
+    private List<String> bookingUsers=new ArrayList<>();
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt; //생성날짜
     @Column(nullable = false)
     private LocalDateTime updatedAt; //수정날짜
+    private double  departureX;
+    private double  departureY;
+    private double arrivalX;
+    private double arrivalY;
+
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -59,8 +68,7 @@ public class Recruit {
     }
 
 
-    public Double getLatitude() {return departureLatitude;}
-    public Double getLongitude() {return departureLongitude;}
+
 
 
 

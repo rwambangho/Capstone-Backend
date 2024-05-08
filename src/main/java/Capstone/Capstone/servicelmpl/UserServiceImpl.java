@@ -133,7 +133,13 @@ public class UserServiceImpl implements UserService {
 
 
     }
-@Override
+
+    @Override
+    public void addRating(User user, double rating) {
+
+    }
+
+    @Override
     public User convertToEntity(UserDto userDto) {
         User user = new User();
         user.setId(userDto.getId());
@@ -181,6 +187,7 @@ public class UserServiceImpl implements UserService {
         }
         return  imageUrl;
     }
+    /*
 @Override
     public void addRating(User user, double star) {
         double totalStar = user.getAvgStar() * user.getStar();
@@ -193,6 +200,8 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
     }
+
+     */
 
 
 
