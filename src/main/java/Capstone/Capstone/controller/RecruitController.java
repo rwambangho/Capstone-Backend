@@ -134,6 +134,7 @@ public class RecruitController {
            return new ResponseEntity<>(result,HttpStatus.OK);
 
 
+
     }
 
     @PostMapping("/recruits/addBooking")
@@ -152,5 +153,6 @@ public class RecruitController {
         log.info("distance={}",distance);
         return new ResponseEntity<>(distance,HttpStatus.OK);
     }
+
 
 }

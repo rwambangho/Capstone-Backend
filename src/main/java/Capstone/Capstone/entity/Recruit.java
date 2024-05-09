@@ -22,7 +22,9 @@ public class Recruit {
     private String title;
     private String contents;
     private String nickname;
-
+    private Long id;
+    private int star=0;
+    private double avgStar=0.0;
 
     @ElementCollection
     private List<String> keywords = new ArrayList<>(); //키워드
@@ -31,6 +33,7 @@ public class Recruit {
     private String departure;
     private LocalDate departureDate; //출발일자
     private int distance; //사용자 실시간 위치에서 모집글 사용자 위치까지 거리
+
     private boolean isDriverPost; //운전자가 작성한 글인지 아닌지
     private int participant;
     private int maxParticipant;

@@ -73,7 +73,7 @@ public class RecruitServiceImpl implements RecruitService {
         recruit.setContents(recruitDetails.getContents());
         recruit.setNickname(recruitDetails.getNickname());
 
-//        recruit.setStar(recruitDetails.getStar());
+        recruit.setStar(recruitDetails.getStar());
 
 
         recruitRepository.save(recruit);
@@ -123,6 +123,7 @@ public class RecruitServiceImpl implements RecruitService {
         return recruitRepository.findByKeywordsIn(keywords);
     }
 
+
     @Override
     public Recruit ConvertToEntity(RecruitDto recruitDto) {
         Recruit recruit=new Recruit();
@@ -143,6 +144,7 @@ public class RecruitServiceImpl implements RecruitService {
         recruit.setDepartureY(recruitDto.getDepartureY());
         recruit.setDepartureX(recruitDto.getDepartureX());
         recruit.setDistance(recruitDto.getDistance());
+        recruit.setAvgStar(recruitDto.getAvgStar());
         log.info("{}",recruitDto.getNickname());
 
         return recruit;
@@ -168,7 +170,7 @@ public class RecruitServiceImpl implements RecruitService {
         recruitDto.setArrivalY(recruit.getArrivalY());
         recruitDto.setDepartureY(recruit.getDepartureY());
         recruitDto.setDepartureX(recruit.getDepartureX());
-
+        recruitDto.setAvgStar(recruit.getAvgStar());
 
         return recruitDto;
     }
@@ -222,7 +224,6 @@ public class RecruitServiceImpl implements RecruitService {
 
         }
     }
-
 
 }
 
