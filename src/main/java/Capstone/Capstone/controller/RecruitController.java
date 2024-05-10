@@ -134,6 +134,7 @@ public class RecruitController {
            return new ResponseEntity<>(result,HttpStatus.OK);
 
 
+
     }
 
     @PostMapping("/recruits/addBooking")
@@ -169,5 +170,6 @@ public class RecruitController {
         List<RecruitDto> recruitDtos=recruitService.getBookingRecord(nickname);
         return new ResponseEntity<>(recruitDtos,HttpStatus.OK);
     }
+
 
 }

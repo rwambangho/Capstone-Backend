@@ -30,6 +30,7 @@ public class User {
 
     private boolean isDriver; //현재 운전자 모드인지 아닌지
     private String driverLicense; //운전면허증 등록여부
+    private int star=0;
     private double avgStar = 0.0; //별점 평균
 
     @ManyToMany(mappedBy = "bookedUsers")

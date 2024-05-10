@@ -1,5 +1,6 @@
 package Capstone.Capstone.repository;
 
+import Capstone.Capstone.dto.RecruitDto;
 import Capstone.Capstone.entity.Recruit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,4 +17,5 @@ public interface RecruitRepository extends JpaRepository<Recruit, Long> {
     List<Recruit> findByKeywordsIn(List<String> keywords); //키워드로 검색. 여러 키워드를 넣고 그 중에 하나라도 포함돼있는 글은 모두 가져온다
 
     List<Recruit> findByIsDriverPost(boolean isDriverPost);
+
 }

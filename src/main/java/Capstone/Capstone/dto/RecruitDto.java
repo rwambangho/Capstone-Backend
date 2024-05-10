@@ -16,6 +16,9 @@ public class RecruitDto {
     private String contents;
     private String nickname;
     private int distance;
+    private Long id;
+    private int star=0;
+    private double avgStar=0.0;
     private List<String> keywords;
     private String destination;
     private String departure;
