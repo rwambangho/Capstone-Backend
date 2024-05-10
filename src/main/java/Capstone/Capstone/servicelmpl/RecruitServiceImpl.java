@@ -156,6 +156,7 @@ public class RecruitServiceImpl implements RecruitService {
         recruit.setParticipant(recruitDto.getParticipant());
         recruit.setMaxParticipant(recruitDto.getMaxParticipant());
         recruit.setUsers(recruitDto.getUsers());
+        recruit.setBookingUsers(recruitDto.getBookingUsers());
         recruit.setIsDriverPost(recruitDto.isDriverPost());
         recruit.setArrivalX(recruitDto.getArrivalX());
         recruit.setArrivalY(recruitDto.getArrivalY());
@@ -247,6 +248,7 @@ public class RecruitServiceImpl implements RecruitService {
             recruit.setBookingUsers(bookingUsers);
             recruit.setUsers(users);
             recruitRepository.save(recruit);
+            log.info("bookingusers:{}",bookingUsers);
 
         }
     }
@@ -255,11 +257,16 @@ public class RecruitServiceImpl implements RecruitService {
     @Override
     public void addBookingRecord(Recruit recruit) {
         List<String> users = recruit.getBookingUsers();
+
         List<User> findusers=recruit.getBookedUsers();
-        log.info("{}", users);
+        if (findusers == null) {
+            findusers = new ArrayList<>();
+        }
+        log.info("예약 인원들:{}", users);
 
         for (String userNickname : users) {
             User findUser = userRepository.findByNickname(userNickname);
+            log.info("찾은 인원:{}",findUser);
             if (findUser != null) {
                 List<Recruit> recruits = findUser.getRecruits();
                 recruits.add(recruit);
@@ -278,9 +285,9 @@ public class RecruitServiceImpl implements RecruitService {
     @Override
     public List<RecruitDto> getBookingRecord(String nickname) {
         User user=userRepository.findByNickname(nickname);
-        log.info("{}",user);
+
      List<Recruit> recruits=user.getRecruits();
-        log.info("{}",recruits);
+
      List<RecruitDto> recruitDtos = new ArrayList<>();
      for(Recruit recruit:recruits){
          RecruitDto recruitDto=ConvertToDto(recruit);
