@@ -48,7 +48,11 @@ public class Recruit {
     private double  departureY;
     private double arrivalX;
     private double arrivalY;
-
+    @ManyToMany
+    @JoinTable(name = "record",
+            joinColumns = @JoinColumn(name = "recruit_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_nickname"))
+    private List<User> bookedUsers;
 
     @PrePersist
     protected void onCreate() {

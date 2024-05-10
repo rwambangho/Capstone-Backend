@@ -1,5 +1,6 @@
 package Capstone.Capstone.dto;
 
+import Capstone.Capstone.entity.Recruit;
 import Capstone.Capstone.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -26,7 +28,7 @@ public class UserDto {
     private double avgStar = 0.0;
     private boolean isDriver; //현재 운전자 모드인지 아닌지
     private String driverLicense; //운전면허증 등록여부
-
+    private List<Recruit> recruits;
 
 
 

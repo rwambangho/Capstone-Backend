@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 public class RecruitDto {
+    private int idxNum;
     private String title;
     private String contents;
     private String nickname;

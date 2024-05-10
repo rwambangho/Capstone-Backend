@@ -10,10 +10,10 @@ import java.util.List;
 
 @Service
 public interface RecruitService {
-    List<Recruit> selectDriverBoardList();
-    List<Recruit> selectPassengerBoardList();
+    List<RecruitDto> selectDriverBoardList();
+    List<RecruitDto> selectPassengerBoardList();
 
-    Recruit getRecruitById(Long id);
+    RecruitDto getRecruitById(Long id);
 
     Recruit createRecruit(RecruitDto recruitDto);
 
@@ -37,4 +37,7 @@ public interface RecruitService {
     void addParticipant(Long idxNum);
     boolean addBookingList(String user, Long idxNum);
     void subBookingList(String user, Long idxNum);
+    void addBookingRecord(Recruit recruit);
+
+    List<RecruitDto> getBookingRecord(String nickname);
 }

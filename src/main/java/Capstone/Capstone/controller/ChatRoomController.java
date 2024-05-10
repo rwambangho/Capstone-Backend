@@ -54,13 +54,14 @@ public class ChatRoomController {
 
     @GetMapping("/getAllChatRoomNumber")
     public ResponseEntity<List<String>>GetAllChatRoomNumber(@RequestParam String userId){
-        log.info("{}",userId);
+
         List<Long>chatRooms=chatRoomSerivce.getAllChatRoom(userId);
-        log.info("{}",chatRooms);
+
         List<String> allOtherUsers = new ArrayList<>();
 
         for (Long chatRoomId : chatRooms) {
            String user = chatRoomSerivce.getUserInChatRoom(userId, chatRoomId);
+           log.info("아이디:{},채팅방번호:{}",userId,chatRoomId);
             allOtherUsers.add(user);
         }
         return new ResponseEntity<>(allOtherUsers,HttpStatus.OK);

@@ -1,15 +1,18 @@
 package Capstone.Capstone.servicelmpl;
 
 import Capstone.Capstone.dto.RecruitDto;
+import Capstone.Capstone.repository.UserRepository;
 import Capstone.Capstone.service.RecruitService;
 import Capstone.Capstone.entity.Recruit;
 import Capstone.Capstone.entity.User;
 import Capstone.Capstone.repository.RecruitRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -21,30 +24,45 @@ import java.util.stream.Collectors;
 @Service
 public class RecruitServiceImpl implements RecruitService {
 
+    private  final UserRepository userRepository;
     private final RecruitRepository recruitRepository;
-
     @Autowired
-    public RecruitServiceImpl(RecruitRepository recruitRepository) {
+    private ModelMapper modelMapper;
+    @Autowired
+    public RecruitServiceImpl(UserRepository userRepository, RecruitRepository recruitRepository) {
+        this.userRepository = userRepository;
         this.recruitRepository = recruitRepository;
     }
 
 
 
     @Override
-    public List<Recruit> selectDriverBoardList(){
+    public List<RecruitDto> selectDriverBoardList(){
 
-        return recruitRepository.findByIsDriverPost(true);
-    }
-    @Override
-    public List<Recruit> selectPassengerBoardList(){
-
-        return recruitRepository.findByIsDriverPost(false);
+        List<Recruit> recruitList = recruitRepository.findByIsDriverPost(true);
+        return recruitList.stream()
+                .map(recruit -> modelMapper.map(recruit, RecruitDto.class)) // 엔티티를 DTO로 변환
+                .collect(Collectors.toList()); // DTO 리스트로 변환하여 반환
     }
 
     @Override
-    public Recruit getRecruitById(Long id){
-        Optional<Recruit> recruit = recruitRepository.findById(id);
-        return recruit.orElse(null);
+    public List<RecruitDto> selectPassengerBoardList(){
+
+        List<Recruit> recruitList = recruitRepository.findByIsDriverPost(false);
+        return recruitList.stream()
+                .map(recruit -> modelMapper.map(recruit, RecruitDto.class)) // 엔티티를 DTO로 변환
+                .collect(Collectors.toList()); // DTO 리스트로 변환하여 반환
+
+    }
+
+    @Override
+    public RecruitDto getRecruitById(Long id){
+        Optional<Recruit> opRecruit = recruitRepository.findById(id);
+       if( opRecruit.isPresent()){
+           RecruitDto recruitDto=ConvertToDto(opRecruit.get());
+           return  recruitDto;
+       }
+       return null;
     }
 
     @Override
@@ -143,6 +161,8 @@ public class RecruitServiceImpl implements RecruitService {
         recruit.setDepartureY(recruitDto.getDepartureY());
         recruit.setDepartureX(recruitDto.getDepartureX());
         recruit.setDistance(recruitDto.getDistance());
+        recruit.setIdxNum(recruitDto.getIdxNum());
+        recruit.setDistance(recruitDto.getDistance());
         log.info("{}",recruitDto.getNickname());
 
         return recruit;
@@ -168,6 +188,8 @@ public class RecruitServiceImpl implements RecruitService {
         recruitDto.setArrivalY(recruit.getArrivalY());
         recruitDto.setDepartureY(recruit.getDepartureY());
         recruitDto.setDepartureX(recruit.getDepartureX());
+        recruitDto.setDistance(recruit.getDistance());
+        recruitDto.setIdxNum(recruit.getIdxNum());
 
 
         return recruitDto;
@@ -180,6 +202,7 @@ public class RecruitServiceImpl implements RecruitService {
         {
             Recruit recruit=Oprecruit.get();
             recruit.setParticipant(recruit.getParticipant()+1);
+
         }
     }
 
@@ -223,7 +246,45 @@ public class RecruitServiceImpl implements RecruitService {
         }
     }
 
+    @Override
+    public void addBookingRecord(Recruit recruit) {
+        List<String> users = recruit.getBookingUsers();
+        List<User> findusers=recruit.getBookedUsers();
+        log.info("{}", users);
 
+        for (String userNickname : users) {
+            User findUser = userRepository.findByNickname(userNickname);
+            if (findUser != null) {
+                List<Recruit> recruits = findUser.getRecruits();
+                recruits.add(recruit);
+                findusers.add(findUser);
+                findUser.setRecruits(recruits);
+                userRepository.save(findUser);
+                log.info("Saved records for user: {}", findUser.getRecruits());
+            } else {
+                log.error("User with nickname {} not found.", userNickname);
+            }
+        }
+        recruit.setBookedUsers(findusers);
+        recruitRepository.save(recruit);
+    }
+
+    @Override
+    public List<RecruitDto> getBookingRecord(String nickname) {
+        User user=userRepository.findByNickname(nickname);
+        log.info("{}",user);
+     List<Recruit> recruits=user.getRecruits();
+        log.info("{}",recruits);
+     List<RecruitDto> recruitDtos = new ArrayList<>();
+     for(Recruit recruit:recruits){
+         RecruitDto recruitDto=ConvertToDto(recruit);
+         recruitDtos.add(recruitDto);
+     }
+     return recruitDtos;
+    }
 }
+
+
+
 
 

@@ -30,28 +30,28 @@ public class RecruitController {
     @GetMapping("/recruits/driver")
     @Tag(name="RECRUIT API")
     @Operation(summary = "모집 글 목록보기",description = "모집 글을 불러옵니다.")
-    public ResponseEntity<List<Recruit>> selectDriverBoardList() {
-        List<Recruit> recruits = recruitService.selectDriverBoardList();
+    public ResponseEntity<List<RecruitDto>> selectDriverBoardList() {
+        List<RecruitDto> recruits = recruitService.selectDriverBoardList();
         return new ResponseEntity<>(recruits, HttpStatus.OK);
     }
 
     @GetMapping("/recruits/passenger")
     @Tag(name="RECRUIT API")
     @Operation(summary = "모집 글 목록보기",description = "모집 글을 불러옵니다.")
-    public ResponseEntity<List<Recruit>> selectPassengerBoardList() {
-        List<Recruit> recruits = recruitService.selectPassengerBoardList();
+    public ResponseEntity<List<RecruitDto>> selectPassengerBoardList() {
+        List<RecruitDto> recruits = recruitService.selectPassengerBoardList();
         return new ResponseEntity<>(recruits, HttpStatus.OK);
     }
 
     @GetMapping("/recruits/{id}")
     @Tag(name="RECRUIT API")
     @Operation(summary = "모집 글 찾기", description = "ID로 글을 찾아옵니다.")
-    public ResponseEntity<Recruit> getRecruitById(@PathVariable Long id) {
-        Recruit recruit = recruitService.getRecruitById(id);
-        if (recruit == null) {
+    public ResponseEntity<RecruitDto> getRecruitById(@PathVariable Long id) {
+        RecruitDto recruitDto = recruitService.getRecruitById(id);
+        if (recruitDto== null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(recruit, HttpStatus.OK);
+        return new ResponseEntity<>(recruitDto, HttpStatus.OK);
     }
 
 
@@ -61,10 +61,10 @@ public class RecruitController {
     public ResponseEntity<Recruit> createRecruit(@RequestBody RecruitDto recruitDto) {
 
             int distance=recruitService.calculateDistance(recruitDto.getDepartureX(), recruitDto.getDepartureY(), recruitDto.getArrivalX(), recruitDto.getArrivalY());
-            log.info("distance={}",distance);
+
             recruitDto.setDistance(distance);
             Recruit createdRecruit = recruitService.createRecruit(recruitDto);
-            log.info("recruit={}",createdRecruit);
+
 
             return new ResponseEntity<>(createdRecruit, HttpStatus.CREATED);
 
@@ -141,16 +141,33 @@ public class RecruitController {
         if (recruitService.getRecruitById(idxNum).getParticipant() < recruitService.getRecruitById(idxNum).getMaxParticipant()) {
             recruitService.addParticipant(idxNum);
             recruitService.subBookingList(nickname, idxNum);
+            log.info("{},{}",recruitService.getRecruitById(idxNum).getParticipant(),recruitService.getRecruitById(idxNum).getMaxParticipant());
+            if(recruitService.getRecruitById(idxNum).getParticipant() == recruitService.getRecruitById(idxNum).getMaxParticipant())
+            {
+                log.info("예약 꽉 참");
+                RecruitDto recruitDto=recruitService.getRecruitById(idxNum);
+                recruitService.addBookingRecord(recruitService.ConvertToEntity(recruitDto));
+                log.info("예약 확정 완료");
+
+            }
+
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
+
         return  new ResponseEntity<>(false,HttpStatus.OK);
     }
 
     @PostMapping("recruits/distance")
     public ResponseEntity<Integer> calculate(@RequestBody DistanceDto distanceDto){
         int distance= recruitService.calculateDistance(distanceDto.getDepartureX(), distanceDto.getDeparturey(), distanceDto.getArrivalX(), distanceDto.getArrivaly());
-        log.info("distance={}",distance);
+
         return new ResponseEntity<>(distance,HttpStatus.OK);
+    }
+    @GetMapping("recruits/records")
+    public ResponseEntity<List<RecruitDto>> getBookingRecords(@RequestParam String nickname){
+
+        List<RecruitDto> recruitDtos=recruitService.getBookingRecord(nickname);
+        return new ResponseEntity<>(recruitDtos,HttpStatus.OK);
     }
 
 }

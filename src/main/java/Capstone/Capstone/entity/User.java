@@ -1,6 +1,7 @@
 package Capstone.Capstone.entity;
 
 
+import Capstone.Capstone.dto.RecruitDto;
 import Capstone.Capstone.entity.Comment;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -30,6 +31,9 @@ public class User {
     private boolean isDriver; //현재 운전자 모드인지 아닌지
     private String driverLicense; //운전면허증 등록여부
     private double avgStar = 0.0; //별점 평균
+
+    @ManyToMany(mappedBy = "bookedUsers")
+    private List<Recruit> recruits;
 
     public void setIsDriver(boolean isDriver) {
         this.isDriver = isDriver;
