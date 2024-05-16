@@ -11,4 +11,9 @@ public class DistanceDto {
 
     private double arrivalX;
     private double arrivaly;
+
+    private double currentX;
+    private double currentY;
+
+    private double time;
 }

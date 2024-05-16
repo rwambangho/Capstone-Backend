@@ -2,13 +2,16 @@ package Capstone.Capstone.controller;
 
 import Capstone.Capstone.dto.RecruitDto;
 import Capstone.Capstone.dto.DistanceDto;
+import Capstone.Capstone.entity.User;
 import Capstone.Capstone.service.RecruitService;
 import Capstone.Capstone.service.UserService;
 import Capstone.Capstone.entity.Recruit;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import nonapi.io.github.classgraph.recycler.Recycler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -61,8 +64,12 @@ public class RecruitController {
     public ResponseEntity<Recruit> createRecruit(@RequestBody RecruitDto recruitDto) {
 
             int distance=recruitService.calculateDistance(recruitDto.getDepartureX(), recruitDto.getDepartureY(), recruitDto.getArrivalX(), recruitDto.getArrivalY());
+            int distance2 = recruitService.calculateDistance(recruitDto.getCurrentX(), recruitDto.getCurrentY(), recruitDto.getDepartureX(), recruitDto.getDepartureY());
 
             recruitDto.setDistance(distance);
+            recruitDto.setDistance2(distance2);
+            int fare = recruitService.calculateTaxiFare(recruitDto.getDistance(), recruitDto.getTime());
+             recruitDto.setFare(fare);
             Recruit createdRecruit = recruitService.createRecruit(recruitDto);
 
 
@@ -170,6 +177,24 @@ public class RecruitController {
         List<RecruitDto> recruitDtos=recruitService.getBookingRecord(nickname);
         return new ResponseEntity<>(recruitDtos,HttpStatus.OK);
     }
+
+    @PostMapping("/recruits/distance2")
+    public ResponseEntity<Integer> calculateDistanceFromUser(@RequestBody DistanceDto distanceDto) {
+        int distance2 = recruitService.calculateDistance(distanceDto.getCurrentX(), distanceDto.getCurrentY(), distanceDto.getDepartureX(), distanceDto.getDeparturey());
+
+        return new ResponseEntity<>(distance2, HttpStatus.OK);
+    }
+
+    @PostMapping("/recruits/rate")
+    public ResponseEntity<Void> rateRecruit(@PathVariable Long recruitId, @RequestParam double star) {
+        recruitService.addRecruitRating(recruitId, star);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
+
 
 
 }

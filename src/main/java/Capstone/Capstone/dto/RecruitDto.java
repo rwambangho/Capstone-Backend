@@ -16,6 +16,7 @@ public class RecruitDto {
     private String contents;
     private String nickname;
     private int distance;
+    private int distance2;
     private Long id;
     private int star=0;
     private double avgStar=0.0;
@@ -34,5 +35,9 @@ public class RecruitDto {
     private double  departureY;
     private double arrivalX;
     private double arrivalY;
+    private double currentX;
+    private double currentY;
+    private double time = 0.0;
+    private int fare=0;
 }
 

@@ -162,9 +162,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("{userId}/star")
-    @Tag(name="User API")
-    @Operation(summary = "사용자 별점",description = "별점을 등록합니다.")
+    @PostMapping("/{userId}/star/")
     public ResponseEntity<User> rateUser(@PathVariable String userId, @RequestParam double star) {
         User user = userService.getUserById(userId);
 
@@ -172,6 +170,7 @@ public class UserController {
 
         return ResponseEntity.ok().build();
     }
+
 
 
 

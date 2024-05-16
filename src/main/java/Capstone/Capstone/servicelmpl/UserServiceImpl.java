@@ -183,7 +183,7 @@ public class UserServiceImpl implements UserService {
         return  imageUrl;
     }
 
-@Override
+    @Override
     public void addRating(User user, double star) {
         double totalStar = user.getAvgStar() * user.getStar();
         totalStar += star;

@@ -9,6 +9,7 @@ import Capstone.Capstone.repository.RecruitRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -49,6 +50,7 @@ public class RecruitServiceImpl implements RecruitService {
     public List<RecruitDto> selectPassengerBoardList(){
 
         List<Recruit> recruitList = recruitRepository.findByIsDriverPost(false);
+        recruitRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         return recruitList.stream()
                 .map(recruit -> modelMapper.map(recruit, RecruitDto.class)) // 엔티티를 DTO로 변환
                 .collect(Collectors.toList()); // DTO 리스트로 변환하여 반환
@@ -111,7 +113,7 @@ public class RecruitServiceImpl implements RecruitService {
     public List<Recruit> findRecruitsByDistance(double userLat, double userLon) {
         List<Recruit> allRecruits = recruitRepository.findAll();
         return allRecruits.stream()
-                .sorted(Comparator.comparing(recruit -> calculateDistance(userLat, userLon, recruit.getArrivalX(), recruit.getArrivalY())))
+                .sorted(Comparator.comparing(recruit -> calculateDistance(userLat, userLon, recruit.getDepartureX(), recruit.getDepartureY())))
                 .collect(Collectors.toList());
     }
 
@@ -164,8 +166,12 @@ public class RecruitServiceImpl implements RecruitService {
         recruit.setDepartureX(recruitDto.getDepartureX());
         recruit.setIdxNum(recruitDto.getIdxNum());
         recruit.setDistance(recruitDto.getDistance());
+        recruit.setDistance2(recruitDto.getDistance2());
         recruit.setAvgStar(recruitDto.getAvgStar());
-
+        recruit.setCurrentX(recruitDto.getCurrentX());
+        recruit.setCurrentY(recruitDto.getCurrentY());
+        recruit.setTime(recruitDto.getTime());
+        recruit.setFare(recruitDto.getFare());
         log.info("{}",recruitDto.getNickname());
 
         return recruit;
@@ -178,6 +184,7 @@ public class RecruitServiceImpl implements RecruitService {
         recruitDto.setDestination(recruit.getDestination());
         recruitDto.setDeparture(recruit.getDeparture());
         recruitDto.setDepartureDate(recruit.getDepartureDate());
+        recruitDto.setDistance2(recruit.getDistance2());
         recruitDto.setKeywords(recruit.getKeywords());
         recruitDto.setTitle(recruit.getTitle());
         recruitDto.setMessage(recruit.getMessage());
@@ -197,7 +204,10 @@ public class RecruitServiceImpl implements RecruitService {
 
         recruitDto.setAvgStar(recruit.getAvgStar());
 
-
+        recruitDto.setCurrentX(recruit.getCurrentX());
+        recruitDto.setCurrentY(recruit.getCurrentY());
+        recruitDto.setTime(recruit.getTime());
+        recruitDto.setFare((recruit.getFare()));
         return recruitDto;
     }
 
@@ -254,6 +264,7 @@ public class RecruitServiceImpl implements RecruitService {
     }
 
 
+
     @Override
     public void addBookingRecord(Recruit recruit) {
         List<String> users = recruit.getBookingUsers();
@@ -294,6 +305,37 @@ public class RecruitServiceImpl implements RecruitService {
          recruitDtos.add(recruitDto);
      }
      return recruitDtos;
+    }
+
+    @Override
+    public void addRecruitRating(Long recruitId, double star) {
+        Recruit recruit = recruitRepository.findById(recruitId).orElse(null);
+        if (recruit == null) {
+            throw new IllegalArgumentException("Recruit not found with ID: " + recruitId);
+        }
+
+        double totalStars = recruit.getAvgStar() * recruit.getStar();
+        totalStars += star;
+        int newStarCount = recruit.getStar() + 1;
+        double newAvgStar = totalStars / newStarCount;
+
+        recruit.setStar(newStarCount);
+        recruit.setAvgStar(newAvgStar);
+
+        recruitRepository.save(recruit);
+    }
+
+    @Override
+    public int calculateTaxiFare(double distance, double time){
+        final double BASE_FARE = 4800; // 기본 요금
+        final double PER_KM_RATE = 763; // km당 요금
+        final double PER_MINUTE_RATE = 50; // 분당 요금
+
+        time = distance / 60; //평균속도 60km로 가정하고 계산
+        double distanceFare = distance > 1 ? (distance - 1) * PER_KM_RATE : 0;
+        double timeFare = time * PER_MINUTE_RATE;
+
+        return (int) (BASE_FARE + distanceFare + timeFare);
     }
 
 }

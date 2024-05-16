@@ -1,6 +1,5 @@
 package Capstone.Capstone.entity;
 
-import Capstone.Capstone.dto.DistanceDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,7 +31,8 @@ public class Recruit {
     private String destination; //목적지
     private String departure;
     private LocalDate departureDate; //출발일자
-    private int distance; //사용자 실시간 위치에서 모집글 사용자 위치까지 거리
+    private int distance;//출발지부터 도착지까지 거리
+    private int distance2; //사용자 실시간 위치에서 모집글 사용자 위치까지 거리
 
     private boolean isDriverPost; //운전자가 작성한 글인지 아닌지
     private int participant;
@@ -56,6 +56,10 @@ public class Recruit {
             joinColumns = @JoinColumn(name = "recruit_id"),
             inverseJoinColumns = @JoinColumn(name = "user_nickname"))
     private List<User> bookedUsers;
+    private double currentX;
+    private double currentY;
+    private double time;
+    private int fare;
 
     @PrePersist
     protected void onCreate() {

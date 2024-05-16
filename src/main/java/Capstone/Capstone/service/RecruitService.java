@@ -37,7 +37,13 @@ public interface RecruitService {
     void addParticipant(Long idxNum);
     boolean addBookingList(String user, Long idxNum);
     void subBookingList(String user, Long idxNum);
+
     void addBookingRecord(Recruit recruit);
 
     List<RecruitDto> getBookingRecord(String nickname);
+
+    void addRecruitRating(Long recruitId, double star);
+
+    int calculateTaxiFare(double distance, double time);
+
 }
