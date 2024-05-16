@@ -147,6 +147,7 @@ public class RecruitServiceImpl implements RecruitService {
     @Override
     public Recruit ConvertToEntity(RecruitDto recruitDto) {
         Recruit recruit=new Recruit();
+        recruit.setCreatedAt(recruitDto.getCreatedAt());
         recruit.setContents(recruitDto.getContents());
         recruit.setDestination(recruitDto.getDestination());
         recruit.setDeparture(recruitDto.getDeparture());
@@ -172,6 +173,8 @@ public class RecruitServiceImpl implements RecruitService {
         recruit.setCurrentY(recruitDto.getCurrentY());
         recruit.setTime(recruitDto.getTime());
         recruit.setFare(recruitDto.getFare());
+        recruit.setId(recruitDto.getId());
+        recruit.setTimeTaxi(recruitDto.getTimeTaxi());
         log.info("{}",recruitDto.getNickname());
 
         return recruit;
@@ -180,6 +183,7 @@ public class RecruitServiceImpl implements RecruitService {
     @Override
     public RecruitDto ConvertToDto(Recruit recruit) {
         RecruitDto recruitDto = new RecruitDto();
+        recruitDto.setCreatedAt(recruit.getCreatedAt());
         recruitDto.setContents(recruit.getContents());
         recruitDto.setDestination(recruit.getDestination());
         recruitDto.setDeparture(recruit.getDeparture());
@@ -198,6 +202,8 @@ public class RecruitServiceImpl implements RecruitService {
         recruitDto.setArrivalY(recruit.getArrivalY());
         recruitDto.setDepartureY(recruit.getDepartureY());
         recruitDto.setDepartureX(recruit.getDepartureX());
+        recruitDto.setId(recruit.getId());
+        recruitDto.setTime(recruit.getTime());
 
         recruitDto.setDistance(recruit.getDistance());
         recruitDto.setIdxNum(recruit.getIdxNum());
@@ -206,7 +212,7 @@ public class RecruitServiceImpl implements RecruitService {
 
         recruitDto.setCurrentX(recruit.getCurrentX());
         recruitDto.setCurrentY(recruit.getCurrentY());
-        recruitDto.setTime(recruit.getTime());
+        recruitDto.setTimeTaxi(recruit.getTimeTaxi());
         recruitDto.setFare((recruit.getFare()));
         return recruitDto;
     }
@@ -316,7 +322,7 @@ public class RecruitServiceImpl implements RecruitService {
 
         double totalStars = recruit.getAvgStar() * recruit.getStar();
         totalStars += star;
-        int newStarCount = recruit.getStar() + 1;
+        double newStarCount = recruit.getStar() + 1;
         double newAvgStar = totalStars / newStarCount;
 
         recruit.setStar(newStarCount);
@@ -324,6 +330,7 @@ public class RecruitServiceImpl implements RecruitService {
 
         recruitRepository.save(recruit);
     }
+
 
     @Override
     public int calculateTaxiFare(double distance, double time){

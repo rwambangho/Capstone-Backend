@@ -42,8 +42,8 @@ public interface RecruitService {
 
     List<RecruitDto> getBookingRecord(String nickname);
 
-    void addRecruitRating(Long recruitId, double star);
-
     int calculateTaxiFare(double distance, double time);
+
+    void addRecruitRating(Long recruitId, double star);
 
 }

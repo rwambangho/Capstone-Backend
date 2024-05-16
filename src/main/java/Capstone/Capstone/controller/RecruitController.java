@@ -1,5 +1,6 @@
 package Capstone.Capstone.controller;
 
+import Capstone.Capstone.dto.RatingDto;
 import Capstone.Capstone.dto.RecruitDto;
 import Capstone.Capstone.dto.DistanceDto;
 import Capstone.Capstone.entity.User;
@@ -68,7 +69,7 @@ public class RecruitController {
 
             recruitDto.setDistance(distance);
             recruitDto.setDistance2(distance2);
-            int fare = recruitService.calculateTaxiFare(recruitDto.getDistance(), recruitDto.getTime());
+            int fare = recruitService.calculateTaxiFare(recruitDto.getDistance(), recruitDto.getTimeTaxi());
              recruitDto.setFare(fare);
             Recruit createdRecruit = recruitService.createRecruit(recruitDto);
 
@@ -167,7 +168,7 @@ public class RecruitController {
 
     @PostMapping("recruits/distance")
     public ResponseEntity<Integer> calculate(@RequestBody DistanceDto distanceDto){
-        int distance= recruitService.calculateDistance(distanceDto.getDepartureX(), distanceDto.getDeparturey(), distanceDto.getArrivalX(), distanceDto.getArrivaly());
+        int distance= recruitService.calculateDistance(distanceDto.getDepartureX(), distanceDto.getDepartureY(), distanceDto.getArrivalX(), distanceDto.getArrivalY());
 
         return new ResponseEntity<>(distance,HttpStatus.OK);
     }
@@ -178,23 +179,29 @@ public class RecruitController {
         return new ResponseEntity<>(recruitDtos,HttpStatus.OK);
     }
 
-    @PostMapping("/recruits/distance2")
-    public ResponseEntity<Integer> calculateDistanceFromUser(@RequestBody DistanceDto distanceDto) {
-        int distance2 = recruitService.calculateDistance(distanceDto.getCurrentX(), distanceDto.getCurrentY(), distanceDto.getDepartureX(), distanceDto.getDeparturey());
-
-        return new ResponseEntity<>(distance2, HttpStatus.OK);
-    }
-
     @PostMapping("/recruits/rate")
     public ResponseEntity<Void> rateRecruit(@PathVariable Long recruitId, @RequestParam double star) {
         recruitService.addRecruitRating(recruitId, star);
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/recruits/star")
+    public ResponseEntity<User> rateUser(@RequestBody RatingDto ratingDto) {
+        log.info("{},{}",ratingDto.getId(),ratingDto.getStar());
+        User user = userService.getUserById(ratingDto.getId());
+
+        userService.addRating(user, ratingDto.getStar());
 
 
+        return ResponseEntity.ok().build();
+    }
+    @PutMapping("/recruits/distance2")
+    public ResponseEntity<Integer> calculateDistanceFromUser(@RequestBody DistanceDto distanceDto) {
+        log.info("{},{},{},{}",distanceDto.getCurrentX(),distanceDto.getCurrentY(),distanceDto.getArrivalY(),distanceDto.getArrivalX());
+        int distance2 = recruitService.calculateDistance(distanceDto.getCurrentX(), distanceDto.getCurrentY(), distanceDto.getArrivalX(), distanceDto.getArrivalY());
 
-
+        return new ResponseEntity<>(distance2, HttpStatus.OK);
+    }
 
 
 }

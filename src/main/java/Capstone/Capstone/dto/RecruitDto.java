@@ -17,13 +17,14 @@ public class RecruitDto {
     private String nickname;
     private int distance;
     private int distance2;
-    private Long id;
-    private int star=0;
+    private String id;
+    private double star=0.0;
     private double avgStar=0.0;
     private List<String> keywords;
     private String destination;
     private String departure;
     private LocalDate departureDate;
+    private String time;
     private LocalDateTime createdAt;
     private String message;
     private int participant;
@@ -37,7 +38,7 @@ public class RecruitDto {
     private double arrivalY;
     private double currentX;
     private double currentY;
-    private double time = 0.0;
+    private double timeTaxi = 0.0;
     private int fare=0;
 }
 
