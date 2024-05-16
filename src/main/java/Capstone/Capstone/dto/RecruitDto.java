@@ -16,13 +16,14 @@ public class RecruitDto {
     private String contents;
     private String nickname;
     private int distance;
-    private Long id;
-    private int star=0;
+    private String id;
+    private double star=0.0;
     private double avgStar=0.0;
     private List<String> keywords;
     private String destination;
     private String departure;
     private LocalDate departureDate;
+    private String time;
     private LocalDateTime createdAt;
     private String message;
     private int participant;

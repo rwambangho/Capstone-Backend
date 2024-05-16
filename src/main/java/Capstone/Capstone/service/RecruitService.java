@@ -40,4 +40,7 @@ public interface RecruitService {
     void addBookingRecord(Recruit recruit);
 
     List<RecruitDto> getBookingRecord(String nickname);
+
+
+    void addRecruitRating(Long recruitId, double star);
 }

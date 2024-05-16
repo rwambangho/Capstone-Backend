@@ -7,8 +7,11 @@ import lombok.Setter;
 @Setter
 public class DistanceDto {
     private double  departureX;
-    private double  departurey;
+    private double  departureY;
 
     private double arrivalX;
-    private double arrivaly;
+    private double arrivalY;
+
+    private double currentX;
+    private double currentY;
 }

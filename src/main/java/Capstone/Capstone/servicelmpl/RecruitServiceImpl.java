@@ -145,6 +145,7 @@ public class RecruitServiceImpl implements RecruitService {
     @Override
     public Recruit ConvertToEntity(RecruitDto recruitDto) {
         Recruit recruit=new Recruit();
+        recruit.setCreatedAt(recruitDto.getCreatedAt());
         recruit.setContents(recruitDto.getContents());
         recruit.setDestination(recruitDto.getDestination());
         recruit.setDeparture(recruitDto.getDeparture());
@@ -165,6 +166,8 @@ public class RecruitServiceImpl implements RecruitService {
         recruit.setIdxNum(recruitDto.getIdxNum());
         recruit.setDistance(recruitDto.getDistance());
         recruit.setAvgStar(recruitDto.getAvgStar());
+        recruit.setId(recruitDto.getId());
+        recruit.setTime(recruitDto.getTime());
 
         log.info("{}",recruitDto.getNickname());
 
@@ -174,6 +177,7 @@ public class RecruitServiceImpl implements RecruitService {
     @Override
     public RecruitDto ConvertToDto(Recruit recruit) {
         RecruitDto recruitDto = new RecruitDto();
+        recruitDto.setCreatedAt(recruit.getCreatedAt());
         recruitDto.setContents(recruit.getContents());
         recruitDto.setDestination(recruit.getDestination());
         recruitDto.setDeparture(recruit.getDeparture());
@@ -191,6 +195,8 @@ public class RecruitServiceImpl implements RecruitService {
         recruitDto.setArrivalY(recruit.getArrivalY());
         recruitDto.setDepartureY(recruit.getDepartureY());
         recruitDto.setDepartureX(recruit.getDepartureX());
+        recruitDto.setId(recruit.getId());
+        recruitDto.setTime(recruit.getTime());
 
         recruitDto.setDistance(recruit.getDistance());
         recruitDto.setIdxNum(recruit.getIdxNum());
@@ -295,6 +301,25 @@ public class RecruitServiceImpl implements RecruitService {
      }
      return recruitDtos;
     }
+
+    @Override
+    public void addRecruitRating(Long recruitId, double star) {
+        Recruit recruit = recruitRepository.findById(recruitId).orElse(null);
+        if (recruit == null) {
+            throw new IllegalArgumentException("Recruit not found with ID: " + recruitId);
+        }
+
+        double totalStars = recruit.getAvgStar() * recruit.getStar();
+        totalStars += star;
+        double newStarCount = recruit.getStar() + 1;
+        double newAvgStar = totalStars / newStarCount;
+
+        recruit.setStar(newStarCount);
+        recruit.setAvgStar(newAvgStar);
+
+        recruitRepository.save(recruit);
+    }
+
 
 }
 
