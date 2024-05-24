@@ -1,11 +1,13 @@
 package Capstone.Capstone.servicelmpl;
 
 import Capstone.Capstone.dto.RecruitDto;
+import Capstone.Capstone.dto.UserDto;
 import Capstone.Capstone.repository.UserRepository;
 import Capstone.Capstone.service.RecruitService;
 import Capstone.Capstone.entity.Recruit;
 import Capstone.Capstone.entity.User;
 import Capstone.Capstone.repository.RecruitRepository;
+import Capstone.Capstone.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +27,15 @@ import java.util.stream.Collectors;
 @Service
 public class RecruitServiceImpl implements RecruitService {
 
+
+    private  final UserService userService;
     private  final UserRepository userRepository;
     private final RecruitRepository recruitRepository;
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
-    public RecruitServiceImpl(UserRepository userRepository, RecruitRepository recruitRepository) {
+    public RecruitServiceImpl(UserService userService, UserRepository userRepository, RecruitRepository recruitRepository) {
+        this.userService = userService;
         this.userRepository = userRepository;
         this.recruitRepository = recruitRepository;
     }
@@ -42,8 +47,8 @@ public class RecruitServiceImpl implements RecruitService {
 
         List<Recruit> recruitList = recruitRepository.findByIsDriverPost(true);
         return recruitList.stream()
-                .map(recruit -> modelMapper.map(recruit, RecruitDto.class)) // 엔티티를 DTO로 변환
-                .collect(Collectors.toList()); // DTO 리스트로 변환하여 반환
+                .map(this::ConvertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -52,8 +57,8 @@ public class RecruitServiceImpl implements RecruitService {
         List<Recruit> recruitList = recruitRepository.findByIsDriverPost(false);
         recruitRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         return recruitList.stream()
-                .map(recruit -> modelMapper.map(recruit, RecruitDto.class)) // 엔티티를 DTO로 변환
-                .collect(Collectors.toList()); // DTO 리스트로 변환하여 반환
+                .map(this::ConvertToDto)
+                .collect(Collectors.toList());
 
     }
 
@@ -71,7 +76,8 @@ public class RecruitServiceImpl implements RecruitService {
     public Recruit createRecruit(RecruitDto recruitDto){
 
       Recruit recruit= ConvertToEntity(recruitDto);
-
+      recruit.setAvgStar(userRepository.findByNickname(recruitDto.getNickname()).getAvgStar());
+      recruit.setFull(false);
         return recruitRepository.save(recruit);
     }
 
@@ -175,6 +181,7 @@ public class RecruitServiceImpl implements RecruitService {
         recruit.setFare(recruitDto.getFare());
         recruit.setId(recruitDto.getId());
         recruit.setTimeTaxi(recruitDto.getTimeTaxi());
+        recruit.setFull(recruitDto.isFull());
         log.info("{}",recruitDto.getNickname());
 
         return recruit;
@@ -214,6 +221,15 @@ public class RecruitServiceImpl implements RecruitService {
         recruitDto.setCurrentY(recruit.getCurrentY());
         recruitDto.setTimeTaxi(recruit.getTimeTaxi());
         recruitDto.setFare((recruit.getFare()));
+        User user=userRepository.findByNickname(recruit.getNickname());
+        UserDto userDto=new UserDto();
+        userDto.setProfileImage(user.getProfileImage());
+        userDto.setAvgStar(user.getAvgStar());
+        recruitDto.setUserDto(userDto);
+        recruitDto.setFull(recruit.isFull());
+
+
+
         return recruitDto;
     }
 
@@ -230,27 +246,42 @@ public class RecruitServiceImpl implements RecruitService {
 
     @Override
     public boolean addBookingList(String user,Long idxNum) {
-        Optional<Recruit> Oprecruit=recruitRepository.findById(idxNum);
-        if(Oprecruit.isPresent())
-        {
-            Recruit recruit=Oprecruit.get();
-           List<String> users= recruit.getUsers();
-           List<String> bookingUsers=recruit.getBookingUsers();
-           if(!users.contains(user)&&!bookingUsers.contains(user))
-           {
-           users.add(user);
-           recruit.setUsers(users);
-           recruitRepository.save(recruit);
-           return true;
-           }
-           else
-           {
-               return false;
-           }
+        Optional<Recruit> Oprecruit = recruitRepository.findById(idxNum);
 
+        if (Oprecruit.isPresent()) {
+            Recruit recruit = Oprecruit.get();
+            List<User> findusers = recruit.getBookedUsers();
+            if (findusers == null) {
+                findusers = new ArrayList<>();
+            }
+
+            List<String> users = recruit.getUsers();
+            List<String> bookingUsers = recruit.getBookingUsers();
+            if (!users.contains(user) && !bookingUsers.contains(user)) {
+
+                users.add(user);
+                recruit.setUsers(users);
+                User findUser = userRepository.findByNickname(user);
+                if (findUser != null) {
+                    List<Recruit> recruits = findUser.getRecruits();
+                    recruits.add(recruit);
+                    findusers.add(findUser);
+                    findUser.setRecruits(recruits);
+                    userRepository.save(findUser);
+                    log.info("Saved records for user: {}", findUser.getRecruits());
+                } else {
+                    log.error("User with nickname {} not found.", user);
+                }
+            }
+            recruit.setBookedUsers(findusers);
+
+            recruitRepository.save(recruit);
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
+
     @Override
     public void subBookingList(String user,Long idxNum) {
         Optional<Recruit> Oprecruit=recruitRepository.findById(idxNum);
@@ -263,6 +294,7 @@ public class RecruitServiceImpl implements RecruitService {
             bookingUsers.add(user);
             recruit.setBookingUsers(bookingUsers);
             recruit.setUsers(users);
+            recruit.setFull(true);
             recruitRepository.save(recruit);
             log.info("bookingusers:{}",bookingUsers);
 

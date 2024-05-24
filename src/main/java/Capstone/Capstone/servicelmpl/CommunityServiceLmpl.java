@@ -47,7 +47,7 @@ public class CommunityServiceLmpl implements CommunityService {
 
     @Override
     public List<Community> findAll() {
-        return communityRepository.findAll();
+        return communityRepository. findAllByOrderByIdDesc();
     }
 
     @Override
@@ -71,7 +71,9 @@ public class CommunityServiceLmpl implements CommunityService {
     @Override
     public Community save(Community community) {
         LocalDateTime now = LocalDateTime.now();
-        community.setTime(now);
+        LocalDateTime nineHoursLater = now.plusHours(9);
+
+        community.setTime(nineHoursLater);
         community.setLikeCount(0L);
         log.info("community={}",community.getId());
         return communityRepository.save(community);

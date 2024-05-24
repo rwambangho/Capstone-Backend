@@ -3,6 +3,7 @@ package Capstone.Capstone.controller;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.json.JSONObject;
 import java.net.URI;
@@ -12,6 +13,7 @@ import java.net.http.HttpResponse;
 import java.util.Arrays;
 
 @RestController
+@RequestMapping("/api")
 public class ChatBotController {
 
     private final String GPT_API_URL = "https://api.openai.com/v1/chat/completions";
@@ -34,11 +36,12 @@ public class ChatBotController {
                                     .put("messages", Arrays.asList(
                                             new JSONObject()
                                                     .put("role", "system")
-                                                    .put("content", "You are a helper at a carpool site and an expert on destinations." +
+                                                    .put("content", "You are a helper at a carpool site" +
                                                             " You can only speak Korean. If you want to make a reservation for carpool," +
                                                             " go to the \"requirement\" page. If you ask the distance from anywhere or the time" +
                                                             " it takes, tell me the distance and the time it takes. And if you ask a destination" +
-                                                            " in a region, please recommend a tourist attraction in that region."),
+                                                            " in a region, please recommend a tourist attraction in that region."+
+                                                            "If ask how to reservation, tell them go to requirement"),
                                             new JSONObject()
                                                     .put("role", "user")
                                                     .put("content", message)

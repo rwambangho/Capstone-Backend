@@ -25,7 +25,7 @@ import static java.util.Arrays.stream;
 
 @Slf4j
 @RestController
-@RequestMapping("/community")
+@RequestMapping("/api/community")
 @Tag(name="Community API",description = "Community API입니다.")
 public class CommunityController {
 

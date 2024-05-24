@@ -57,6 +57,9 @@ public class Recruit {
             joinColumns = @JoinColumn(name = "recruit_id"),
             inverseJoinColumns = @JoinColumn(name = "user_nickname"))
     private List<User> bookedUsers;
+
+    private boolean Full=false;
+
     private double currentX;
     private double currentY;
     private double timeTaxi;

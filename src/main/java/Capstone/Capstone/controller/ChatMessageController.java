@@ -23,7 +23,9 @@ import java.util.stream.Collectors;
 
 
 @Slf4j
+@RequestMapping("/api")
 @RestController
+
 @Tag(name="ChatMessage", description = "ChatMessage API입니다")
 public class ChatMessageController {
 

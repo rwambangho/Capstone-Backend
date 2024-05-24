@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/api/comments")
 @Tag(name="Comment", description = "Comment API입니다")
 public class CommentController {
 

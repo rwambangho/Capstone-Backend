@@ -40,5 +40,8 @@ public class RecruitDto {
     private double currentY;
     private double timeTaxi = 0.0;
     private int fare=0;
+    private UserDto userDto;
+    private boolean Full;
+
 }
 

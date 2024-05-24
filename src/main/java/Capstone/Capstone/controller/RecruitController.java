@@ -22,6 +22,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@RequestMapping("/api")
 @Tag(name="RECRUIT API", description = "RECRUIT API입니다")
 public class RecruitController {
 
@@ -71,6 +72,9 @@ public class RecruitController {
             recruitDto.setDistance2(distance2);
             int fare = recruitService.calculateTaxiFare(recruitDto.getDistance(), recruitDto.getTimeTaxi());
              recruitDto.setFare(fare);
+             recruitDto.setFull(false);
+
+
             Recruit createdRecruit = recruitService.createRecruit(recruitDto);
 
 
@@ -81,6 +85,7 @@ public class RecruitController {
 
 
     }
+
 
     @DeleteMapping("/{id}")
     @Tag(name="RECRUIT API")
@@ -151,14 +156,7 @@ public class RecruitController {
             recruitService.addParticipant(idxNum);
             recruitService.subBookingList(nickname, idxNum);
             log.info("{},{}",recruitService.getRecruitById(idxNum).getParticipant(),recruitService.getRecruitById(idxNum).getMaxParticipant());
-            if(recruitService.getRecruitById(idxNum).getParticipant() == recruitService.getRecruitById(idxNum).getMaxParticipant())
-            {
-                log.info("예약 꽉 참");
-                RecruitDto recruitDto=recruitService.getRecruitById(idxNum);
-                recruitService.addBookingRecord(recruitService.ConvertToEntity(recruitDto));
-                log.info("예약 확정 완료");
 
-            }
 
             return new ResponseEntity<>(true, HttpStatus.OK);
         }

@@ -40,6 +40,8 @@ public interface RecruitService {
 
     void addBookingRecord(Recruit recruit);
 
+   
+
     List<RecruitDto> getBookingRecord(String nickname);
 
     int calculateTaxiFare(double distance, double time);

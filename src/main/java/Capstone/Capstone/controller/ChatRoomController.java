@@ -1,6 +1,7 @@
 package Capstone.Capstone.controller;
 
 
+import Capstone.Capstone.entity.User;
 import Capstone.Capstone.service.UserService;
 
 import Capstone.Capstone.dto.CreateRoomDto;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@RequestMapping("/api")
 public class ChatRoomController {
 
     private final UserService userService;
@@ -53,16 +55,22 @@ public class ChatRoomController {
     }
 
     @GetMapping("/getAllChatRoomNumber")
-    public ResponseEntity<List<String>>GetAllChatRoomNumber(@RequestParam String userId){
+    public ResponseEntity<List<UserDto>>GetAllChatRoomNumber(@RequestParam String userId){
 
         List<Long>chatRooms=chatRoomSerivce.getAllChatRoom(userId);
 
-        List<String> allOtherUsers = new ArrayList<>();
+        List<UserDto> allOtherUsers = new ArrayList<>();
 
         for (Long chatRoomId : chatRooms) {
-           String user = chatRoomSerivce.getUserInChatRoom(userId, chatRoomId);
+           String username = chatRoomSerivce.getUserInChatRoom(userId, chatRoomId);
            log.info("아이디:{},채팅방번호:{}",userId,chatRoomId);
-            allOtherUsers.add(user);
+           User user=userService.getUserByNickName(username);
+           UserDto userDto=new UserDto();
+           userDto.setNickname(user.getNickname());
+           userDto.setAvgStar(user.getAvgStar());
+           userDto.setProfileImage(user.getProfileImage());
+            allOtherUsers.add(userDto);
+            log.info("user={}",userDto);
         }
         return new ResponseEntity<>(allOtherUsers,HttpStatus.OK);
     }
