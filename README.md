@@ -1,4 +1,4 @@
-# ToCar - Spring과 React를 활용한 카풀 매칭 커뮤니티 플랫폼
+# ToCar - 실시간 위치를 이용한 카풀 웹 서비스
 ---
 #### 2024년 한성대학교 컴퓨터공학부 캡스톤디자인
 * 팀명: The Page
@@ -36,15 +36,34 @@
 
 ---
 
-#### 📌. 주요기능
+#### 🙋‍♂️ 사용방법
+
+![image](https://github.com/rwambangho/Capstone-Backend/assets/121777977/7a56d726-68c3-4e61-ad30-104da2bc8eef)
+
+
+![image](https://github.com/rwambangho/Capstone-Backend/assets/121777977/dae775f3-6071-48fb-865c-98a334b4b7fc)
+
+
+![image](https://github.com/rwambangho/Capstone-Backend/assets/121777977/1c0ea324-2756-4bd8-8bd4-44a6fccbb07d)
+
+---
+
+#### 📌 주요기능
+
 ✔ 탑승자 모드와 운전자 모드로 각각 카풀 매칭글을 작성할 수 있어 운전자를 기다릴수 있고 내가 운전자가 되어 탑승자들을 태워줄 수도 있다.
+
 
 ✔ 예약페이지에서 사용자 실시간위치를 반영하여 가까운 사용자의 카풀을 찾을 수 있다.
 
+
 ✔ 원하는 카풀을 찾아 운전자와 채팅으로 연락을 주고받을 수 있다. 
+
 
 ✔ 예약을 완료하면 예약페이지에서 내 카풀을 볼 수 있고 이용 후 운전자에게 별점을 남겨 줄 수 있다.
 
+
 ✔ 커뮤니티 페이지에서 글을 작성할 수 있고 다른 사용자들의 글을 읽고 댓글을 남기거나 좋아요를 누를 수 있다.
+
+----
 
 https://github.com/rwambangho/Capstone-Frontend.git
